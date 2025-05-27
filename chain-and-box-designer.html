@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chain & Box Designer | Seiko Watch Customizer</title>
+    <meta name="description" content="Create custom watch chains and design your personalized watch box with ASWAT MODS branding. Complete customization for the ultimate unboxing experience.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #14213D;
+            --secondary: #E5E5E5;
+            --accent: #FCA311;
+            --background: #FFFFFF;
+            --text: #000000;
+            --highlight: #C9D8E4;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --gold: #FFD700;
+            --silver: #C0C0C0;
+            --platinum: #E5E4E2;
+            --rose-gold: #ECC5C0;
+            --gradient-1: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            --gradient-2: linear-gradient(135deg, var(--highlight) 0%, var(--secondary) 100%);
+            --gradient-gold: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            --gradient-silver: linear-gradient(135deg, #E5E5E5 0%, #C0C0C0 100%);
+            --gradient-luxury: linear-gradient(135deg, #2C3E50 0%, #34495E 100%);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--background);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+        }
+
+        .logo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .breadcrumb {
+            color: var(--text);
+            opacity: 0.7;
+            font-size: 14px;
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* Main Layout */
+        .main-content {
+            display: grid;
+            grid-template-columns: 350px 1fr 350px;
+            gap: 32px;
+            padding: 32px 0;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Design Tabs */
+        .design-tabs {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+            height: fit-content;
+            position: sticky;
+            top: 120px;
+        }
+
+        .tabs-header {
+            display: flex;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--highlight);
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 12px 16px;
+            background: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .category-section {
+            margin-bottom: 24px;
+        }
+
+        .category-label {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-size: 14px;
+            display: block;
+        }
+
+        .option-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .option-item {
+            background: var(--gradient-2);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            padding: 12px 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .option-item:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .option-item.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .option-item.premium {
+            background: var(--gradient-gold);
+            color: var(--primary);
+        }
+
+        .option-item.premium::after {
+            content: '⭐';
+            position: absolute;
+            top: 2px;
+            right: 4px;
+            font-size: 10px;
+        }
+
+        /* Material and Color Swatches */
+        .material-swatch {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: var(--shadow-sm);
+            margin: 0 auto 4px;
+        }
+
+        .material-gold { background: var(--gradient-gold); }
+        .material-silver { background: var(--gradient-silver); }
+        .material-platinum { background: linear-gradient(135deg, #E5E4E2 0%, #B8B6B4 100%); }
+        .material-rose-gold { background: linear-gradient(135deg, #ECC5C0 0%, #D4A5A5 100%); }
+        .material-steel { background: linear-gradient(135deg, #C0C0C0 0%, #808080 100%); }
+
+        /* Box Color Swatches */
+        .color-black { background: #000000; }
+        .color-navy { background: #14213D; }
+        .color-burgundy { background: #800020; }
+        .color-forest { background: #228B22; }
+        .color-cream { background: #F5F5DC; }
+        .color-white { background: #FFFFFF; border: 1px solid #E5E5E5; }
+
+        /* Size Sliders */
+        .size-control {
+            margin: 16px 0;
+        }
+
+        .slider-input {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--secondary);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .slider-input::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .size-display {
+            text-align: center;
+            font-weight: 600;
+            color: var(--primary);
+            margin-top: 8px;
+        }
+
+        .custom-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--highlight);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .custom-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(252, 163, 17, 0.1);
+        }
+
+        /* Main Display Area */
+        .display-area {
+            background: var(--gradient-2);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .display-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .display-subtitle {
+            color: var(--text);
+            opacity: 0.7;
+            margin-bottom: 32px;
+        }
+
+        /* Chain Display */
+        .chain-display-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            margin: 0 auto;
+            perspective: 1000px;
+        }
+
+        .chain-preview {
+            width: 300px;
+            height: 400px;
+            margin: 0 auto;
+            position: relative;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            border-radius: 20px;
+        }
+
+        .chain-links {
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 300px;
+            background: var(--gradient-silver);
+            border-radius: 100px;
+            border: 8px solid var(--accent);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            transition: all 0.5s ease;
+        }
+
+        .chain-detail {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* Watch Box Display */
+        .box-display-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            margin: 0 auto;
+            perspective: 1200px;
+        }
+
+        .watch-box {
+            width: 350px;
+            height: 250px;
+            margin: 50px auto;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: all 0.6s ease;
+        }
+
+        .box-face {
+            position: absolute;
+            width: 350px;
+            height: 250px;
+            border: 2px solid var(--accent);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .box-top {
+            background: var(--gradient-luxury);
+            transform: rotateX(90deg) translateZ(125px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .box-front {
+            background: var(--gradient-luxury);
+            transform: translateZ(125px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .box-back {
+            background: var(--gradient-luxury);
+            transform: rotateY(180deg) translateZ(125px);
+        }
+
+        .box-left {
+            background: var(--gradient-luxury);
+            transform: rotateY(-90deg) translateZ(175px);
+            width: 250px;
+        }
+
+        .box-right {
+            background: var(--gradient-luxury);
+            transform: rotateY(90deg) translateZ(175px);
+            width: 250px;
+        }
+
+        .box-bottom {
+            background: var(--gradient-luxury);
+            transform: rotateX(-90deg) translateZ(125px);
+        }
+
+        /* ASWAT MODS Logo */
+        .aswat-logo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--accent);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+        }
+
+        .logo-tagline {
+            font-size: 12px;
+            color: white;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .custom-text {
+            color: white;
+            font-weight: 600;
+            margin-top: 12px;
+            font-size: 14px;
+        }
+
+        .box-interior {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            border: 1px solid var(--accent);
+        }
+
+        /* Customization Panel */
+        .customization-panel {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+            height: fit-content;
+            position: sticky;
+            top: 120px;
+        }
+
+        .panel-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .custom-section {
+            background: var(--gradient-2);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .font-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .font-option {
+            background: white;
+            border: 1px solid var(--highlight);
+            border-radius: 6px;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .font-option.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Price Summary */
+        .price-summary {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 32px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .total-price {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent);
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .price-breakdown {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 8px;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .price-item {
+            display: contents;
+        }
+
+        .item-name {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .item-price {
+            color: var(--text);
+            text-align: right;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .action-button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .action-button:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .action-button.secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .action-button.secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* 3D Controls */
+        .view-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 8px 16px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .control-button {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .control-button:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1400px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .design-tabs,
+            .customization-panel {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .watch-box {
+                width: 280px;
+                height: 200px;
+            }
+
+            .box-face {
+                width: 280px;
+                height: 200px;
+            }
+
+            .option-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animation Effects */
+        @keyframes rotate {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(360deg); }
+        }
+
+        .rotating {
+            animation: rotate 8s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .premium {
+            animation: shimmer 2s ease-in-out infinite;
+        }
+
+        /* Success Messages */
+        .success-message {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 16px 0;
+            color: var(--success);
+            font-weight: 500;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav container">
+            <a href="#" class="logo">SEIKO CUSTOMIZER</a>
+            <div class="breadcrumb">
+                <a href="homepage.html">Home</a> / <a href="jewelry-designer.html">Design Studio</a> / Chain & Box Designer
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-content">
+            <!-- Design Options -->
+            <aside class="design-tabs">
+                <div class="tabs-header">
+                    <button class="tab-button active" data-tab="chains">Custom Chains</button>
+                    <button class="tab-button" data-tab="boxes">Watch Boxes</button>
+                </div>
+
+                <!-- Chain Design Tab -->
+                <div id="chains-tab" class="tab-content active">
+                    <h2 class="section-title">Custom Chain Designer</h2>
+                    
+                    <div class="category-section">
+                        <label class="category-label">Chain Style</label>
+                        <div class="option-grid">
+                            <div class="option-item selected" data-chain="cuban-link" data-price="189">
+                                <div class="material-swatch material-gold"></div>
+                                Cuban Link
+                            </div>
+                            <div class="option-item" data-chain="rope-chain" data-price="149">
+                                <div class="material-swatch material-silver"></div>
+                                Rope Chain
+                            </div>
+                            <div class="option-item" data-chain="figaro-chain" data-price="129">
+                                <div class="material-swatch material-steel"></div>
+                                Figaro Chain
+                            </div>
+                            <div class="option-item premium" data-chain="franco-chain" data-price="289">
+                                <div class="material-swatch material-platinum"></div>
+                                Franco Chain
+                            </div>
+                            <div class="option-item" data-chain="box-chain" data-price="109">
+                                <div class="material-swatch material-silver"></div>
+                                Box Chain
+                            </div>
+                            <div class="option-item premium" data-chain="byzantine-chain" data-price="349">
+                                <div class="material-swatch material-gold"></div>
+                                Byzantine
+                            </div>
+                            <div class="option-item" data-chain="snake-chain" data-price="139">
+                                <div class="material-swatch material-steel"></div>
+                                Snake Chain
+                            </div>
+                            <div class="option-item premium" data-chain="miami-cuban" data-price="449">
+                                <div class="material-swatch material-gold"></div>
+                                Miami Cuban
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="category-section">
+                        <label class="category-label">Chain Material</label>
+                        <div class="option-grid">
+                            <div class="option-item selected" data-material="sterling-silver" data-material-price="0">
+                                <div class="material-swatch material-silver"></div>
+                                Sterling Silver
+                            </div>
+                            <div class="option-item" data-material="14k-gold" data-material-price="250">
+                                <div class="material-swatch material-gold"></div>
+                                14K Gold
+                            </div>
+                            <div class="option-item premium" data-material="18k-gold" data-material-price="450">
+                                <div class="material-swatch material-gold"></div>
+                                18K Gold
+                            </div>
+                            <div class="option-item premium" data-material="platinum" data-material-price="650">
+                                <div class="material-swatch material-platinum"></div>
+                                Platinum
+                            </div>
+                            <div class="option-item" data-material="rose-gold" data-material-price="280">
+                                <div class="material-swatch material-rose-gold"></div>
+                                Rose Gold
+                            </div>
+                            <div class="option-item" data-material="steel" data-material-price="-50">
+                                <div class="material-swatch material-steel"></div>
+                                Stainless Steel
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="category-section">
+                        <label class="category-label">Chain Width</label>
+                        <div class="size-control">
+                            <input type="range" class="slider-input" id="chainWidth" min="2" max="12" value="6" step="0.5">
+                            <div class="size-display" id="chainWidthDisplay">6.0mm</div>
+                        </div>
+                    </div>
+
+                    <div class="category-section">
+                        <label class="category-label">Chain Length</label>
+                        <div class="size-control">
+                            <input type="range" class="slider-input" id="chainLength" min="16" max="30" value="20" step="1">
+                            <div class="size-display" id="chainLengthDisplay">20 inches</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Watch Box Design Tab -->
+                <div id="boxes-tab" class="tab-content">
+                    <h2 class="section-title">Watch Box Designer</h2>
+                    
+                    <div class="category-section">
+                        <label class="category-label">Box Style</label>
+                        <div class="option-grid">
+                            <div class="option-item selected" data-box="classic" data-box-price="49">
+                                Classic Box
+                            </div>
+                            <div class="option-item premium" data-box="luxury" data-box-price="129">
+                                Luxury Box
+                            </div>
+                            <div class="option-item" data-box="travel" data-box-price="79">
+                                Travel Case
+                            </div>
+                            <div class="option-item premium" data-box="wooden" data-box-price="189">
+                                Wooden Box
+                            </div>
+                            <div class="option-item" data-box="display" data-box-price="89">
+                                Display Case
+                            </div>
+                            <div class="option-item premium" data-box="collector" data-box-price="249">
+                                Collector Box
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="category-section">
+                        <label class="category-label">Box Color</label>
+                        <div class="option-grid">
+                            <div class="option-item selected" data-color="black" data-color-name="Midnight Black">
+                                <div class="material-swatch color-black"></div>
+                                Midnight Black
+                            </div>
+                            <div class="option-item" data-color="navy" data-color-name="Navy Blue">
+                                <div class="material-swatch color-navy"></div>
+                                Navy Blue
+                            </div>
+                            <div class="option-item" data-color="burgundy" data-color-name="Burgundy">
+                                <div class="material-swatch color-burgundy"></div>
+                                Burgundy
+                            </div>
+                            <div class="option-item" data-color="forest" data-color-name="Forest Green">
+                                <div class="material-swatch color-forest"></div>
+                                Forest Green
+                            </div>
+                            <div class="option-item" data-color="cream" data-color-name="Cream">
+                                <div class="material-swatch color-cream"></div>
+                                Cream
+                            </div>
+                            <div class="option-item" data-color="white" data-color-name="Pearl White">
+                                <div class="material-swatch color-white"></div>
+                                Pearl White
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="category-section">
+                        <label class="category-label">Interior Material</label>
+                        <div class="option-grid">
+                            <div class="option-item selected" data-interior="velvet" data-interior-price="0">
+                                Velvet Lining
+                            </div>
+                            <div class="option-item premium" data-interior="silk" data-interior-price="35">
+                                Silk Lining
+                            </div>
+                            <div class="option-item" data-interior="leather" data-interior-price="25">
+                                Leather Lining
+                            </div>
+                            <div class="option-item premium" data-interior="suede" data-interior-price="45">
+                                Suede Lining
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Display -->
+            <main class="display-area">
+                <h1 class="display-title">Custom Chain & Box Designer</h1>
+                <p class="display-subtitle">Create your perfect chain and personalized watch box with ASWAT MODS premium branding</p>
+                
+                <!-- Chain Display -->
+                <div id="chain-display" class="chain-display-container">
+                    <div class="chain-preview">
+                        <div class="chain-links" id="chainPreview">
+                            CUBAN LINK CHAIN
+                        </div>
+                        <div class="chain-detail" id="chainDetail">
+                            6.0mm × 20"<br>Sterling Silver
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Box Display -->
+                <div id="box-display" class="box-display-container" style="display: none;">
+                    <div class="watch-box rotating" id="watchBox">
+                        <div class="box-face box-front">
+                            <div class="aswat-logo">ASWAT MODS</div>
+                            <div class="logo-tagline">Premium Watch Modifications</div>
+                            <div class="custom-text" id="customBoxText">Custom Watch Collection</div>
+                            <div class="box-interior">
+                                Velvet Interior
+                            </div>
+                        </div>
+                        <div class="box-face box-back">
+                            <div style="color: white; text-align: center; padding: 20px;">
+                                <div style="font-size: 14px; margin-bottom: 8px;">ASWAT MODS</div>
+                                <div style="font-size: 10px; opacity: 0.7;">Crafted with Precision</div>
+                            </div>
+                        </div>
+                        <div class="box-face box-top">
+                            <div class="aswat-logo" style="font-size: 20px;">ASWAT MODS</div>
+                            <div style="color: white; font-size: 10px; opacity: 0.8;">Premium Collection</div>
+                        </div>
+                        <div class="box-face box-bottom"></div>
+                        <div class="box-face box-left"></div>
+                        <div class="box-face box-right"></div>
+                    </div>
+                    <div class="view-controls">
+                        <button class="control-button" onclick="rotateBox('left')">← Rotate</button>
+                        <button class="control-button" onclick="rotateBox('right')">Rotate →</button>
+                        <button class="control-button" onclick="toggleRotation()">Auto Rotate</button>
+                    </div>
+                </div>
+
+                <div class="price-summary">
+                    <div class="total-price" id="totalPrice">$338.00</div>
+                    <div class="price-breakdown" id="priceBreakdown">
+                        <div class="price-item">
+                            <span class="item-name">Cuban Link Chain</span>
+                            <span class="item-price">$189.00</span>
+                        </div>
+                        <div class="price-item">
+                            <span class="item-name">Sterling Silver</span>
+                            <span class="item-price">$0.00</span>
+                        </div>
+                        <div class="price-item">
+                            <span class="item-name">Custom Sizing</span>
+                            <span class="item-price">$0.00</span>
+                        </div>
+                        <div class="price-item">
+                            <span class="item-name">Classic Watch Box</span>
+                            <span class="item-price">$49.00</span>
+                        </div>
+                        <div class="price-item">
+                            <span class="item-name">ASWAT MODS Branding</span>
+                            <span class="item-price">Included</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-button" onclick="addToCart()">Add to Cart</button>
+                        <button class="action-button secondary" onclick="saveDesign()">Save Design</button>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Customization Panel -->
+            <aside class="customization-panel">
+                <h2 class="panel-title">Personalization</h2>
+                
+                <div class="custom-section">
+                    <div class="category-label">Chain Engraving</div>
+                    <input type="text" class="custom-input" id="chainEngraving" placeholder="Custom engraving text" maxlength="20">
+                    <div class="font-options">
+                        <div class="font-option selected" data-font="script">Script</div>
+                        <div class="font-option" data-font="block">Block</div>
+                        <div class="font-option" data-font="cursive">Cursive</div>
+                        <div class="font-option" data-font="modern">Modern</div>
+                    </div>
+                </div>
+
+                <div class="custom-section">
+                    <div class="category-label">Box Personalization</div>
+                    <input type="text" class="custom-input" id="boxText" placeholder="Custom box text" maxlength="30" value="Custom Watch Collection">
+                    <div style="margin-top: 12px;">
+                        <label style="display: block; margin-bottom: 8px; font-size: 14px; font-weight: 500;">ASWAT MODS Logo Position</label>
+                        <div class="option-grid">
+                            <div class="option-item selected" data-logo="front">Front Center</div>
+                            <div class="option-item" data-logo="top">Top Center</div>
+                            <div class="option-item" data-logo="corner">Front Corner</div>
+                            <div class="option-item" data-logo="embossed">Embossed</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="custom-section">
+                    <div class="category-label">Special Features</div>
+                    <div class="option-grid">
+                        <div class="option-item" data-feature="led" data-feature-price="45">
+                            LED Lighting
+                        </div>
+                        <div class="option-item" data-feature="lock" data-feature-price="25">
+                            Security Lock
+                        </div>
+                        <div class="option-item premium" data-feature="wireless" data-feature-price="89">
+                            Wireless Charging
+                        </div>
+                        <div class="option-item" data-feature="humidity" data-feature-price="35">
+                            Humidity Control
+                        </div>
+                    </div>
+                </div>
+
+                <div class="custom-section">
+                    <div class="category-label">Gift Options</div>
+                    <div class="option-grid">
+                        <div class="option-item selected" data-gift="none" data-gift-price="0">
+                            Standard
+                        </div>
+                        <div class="option-item" data-gift="card" data-gift-price="15">
+                            Gift Card
+                        </div>
+                        <div class="option-item" data-gift="wrap" data-gift-price="25">
+                            Gift Wrapping
+                        </div>
+                        <div class="option-item premium" data-gift="premium" data-gift-price="45">
+                            Premium Gift Set
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons" style="margin-top: 20px;">
+                    <button class="action-button secondary" onclick="resetDesign()">Reset</button>
+                    <button class="action-button" onclick="shareDesign()">Share</button>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // Current design configuration
+        let currentConfig = {
+            activeTab: 'chains',
+            chain: {
+                style: 'cuban-link',
+                material: 'sterling-silver',
+                width: 6.0,
+                length: 20,
+                engraving: '',
+                font: 'script'
+            },
+            box: {
+                style: 'classic',
+                color: 'black',
+                colorName: 'Midnight Black',
+                interior: 'velvet',
+                customText: 'Custom Watch Collection',
+                logoPosition: 'front',
+                features: [],
+                gift: 'none'
+            }
+        };
+
+        // Pricing data
+        const chainPrices = {
+            'cuban-link': 189,
+            'rope-chain': 149,
+            'figaro-chain': 129,
+            'franco-chain': 289,
+            'box-chain': 109,
+            'byzantine-chain': 349,
+            'snake-chain': 139,
+            'miami-cuban': 449
+        };
+
+        const materialPrices = {
+            'sterling-silver': 0,
+            '14k-gold': 250,
+            '18k-gold': 450,
+            'platinum': 650,
+            'rose-gold': 280,
+            'steel': -50
+        };
+
+        const boxPrices = {
+            'classic': 49,
+            'luxury': 129,
+            'travel': 79,
+            'wooden': 189,
+            'display': 89,
+            'collector': 249
+        };
+
+        const interiorPrices = {
+            'velvet': 0,
+            'silk': 35,
+            'leather': 25,
+            'suede': 45
+        };
+
+        const featurePrices = {
+            'led': 45,
+            'lock': 25,
+            'wireless': 89,
+            'humidity': 35
+        };
+
+        const giftPrices = {
+            'none': 0,
+            'card': 15,
+            'wrap': 25,
+            'premium': 45
+        };
+
+        let boxRotation = 0;
+        let autoRotate = true;
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            updateDisplay();
+            updatePricing();
+            startAutoRotation();
+        });
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Tab switching
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    switchTab(this.dataset.tab);
+                });
+            });
+
+            // Option selection
+            document.querySelectorAll('.option-item').forEach(option => {
+                option.addEventListener('click', function() {
+                    selectOption(this);
+                });
+            });
+
+            // Sliders
+            document.getElementById('chainWidth').addEventListener('input', function() {
+                updateChainWidth(this.value);
+            });
+
+            document.getElementById('chainLength').addEventListener('input', function() {
+                updateChainLength(this.value);
+            });
+
+            // Text inputs
+            document.getElementById('chainEngraving').addEventListener('input', function() {
+                currentConfig.chain.engraving = this.value;
+            });
+
+            document.getElementById('boxText').addEventListener('input', function() {
+                currentConfig.box.customText = this.value;
+                updateBoxText();
+            });
+
+            // Font selection
+            document.querySelectorAll('.font-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    selectFont(this.dataset.font);
+                });
+            });
+        }
+
+        // Switch between chain and box tabs
+        function switchTab(tab) {
+            currentConfig.activeTab = tab;
+
+            // Update tab buttons
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+
+            // Show/hide tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`${tab}-tab`).classList.add('active');
+
+            // Show/hide displays
+            if (tab === 'chains') {
+                document.getElementById('chain-display').style.display = 'block';
+                document.getElementById('box-display').style.display = 'none';
+            } else {
+                document.getElementById('chain-display').style.display = 'none';
+                document.getElementById('box-display').style.display = 'block';
+            }
+
+            updateDisplay();
+        }
+
+        // Select option
+        function selectOption(element) {
+            const parent = element.closest('.option-grid');
+            
+            // Update visual selection
+            parent.querySelectorAll('.option-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            element.classList.add('selected');
+
+            // Update configuration
+            if (element.dataset.chain) {
+                currentConfig.chain.style = element.dataset.chain;
+            }
+            if (element.dataset.material) {
+                currentConfig.chain.material = element.dataset.material;
+            }
+            if (element.dataset.box) {
+                currentConfig.box.style = element.dataset.box;
+            }
+            if (element.dataset.color) {
+                currentConfig.box.color = element.dataset.color;
+                currentConfig.box.colorName = element.dataset.colorName;
+            }
+            if (element.dataset.interior) {
+                currentConfig.box.interior = element.dataset.interior;
+            }
+            if (element.dataset.logo) {
+                currentConfig.box.logoPosition = element.dataset.logo;
+            }
+            if (element.dataset.feature) {
+                const feature = element.dataset.feature;
+                if (currentConfig.box.features.includes(feature)) {
+                    currentConfig.box.features = currentConfig.box.features.filter(f => f !== feature);
+                    element.classList.remove('selected');
+                } else {
+                    currentConfig.box.features.push(feature);
+                }
+            }
+            if (element.dataset.gift) {
+                currentConfig.box.gift = element.dataset.gift;
+            }
+
+            updateDisplay();
+            updatePricing();
+        }
+
+        // Update chain width
+        function updateChainWidth(value) {
+            currentConfig.chain.width = parseFloat(value);
+            document.getElementById('chainWidthDisplay').textContent = value + 'mm';
+            updateDisplay();
+        }
+
+        // Update chain length
+        function updateChainLength(value) {
+            currentConfig.chain.length = parseInt(value);
+            document.getElementById('chainLengthDisplay').textContent = value + ' inches';
+            updateDisplay();
+        }
+
+        // Select font
+        function selectFont(font) {
+            currentConfig.chain.font = font;
+
+            // Update visual selection
+            document.querySelectorAll('.font-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.querySelector(`[data-font="${font}"]`).classList.add('selected');
+        }
+
+        // Update display
+        function updateDisplay() {
+            updateChainDisplay();
+            updateBoxDisplay();
+        }
+
+        // Update chain display
+        function updateChainDisplay() {
+            const chainPreview = document.getElementById('chainPreview');
+            const chainDetail = document.getElementById('chainDetail');
+            const config = currentConfig.chain;
+            
+            // Update chain visual
+            const materialColors = {
+                'sterling-silver': 'var(--gradient-silver)',
+                '14k-gold': 'var(--gradient-gold)',
+                '18k-gold': 'var(--gradient-gold)',
+                'platinum': 'linear-gradient(135deg, #E5E4E2 0%, #B8B6B4 100%)',
+                'rose-gold': 'linear-gradient(135deg, #ECC5C0 0%, #D4A5A5 100%)',
+                'steel': 'var(--gradient-silver)'
+            };
+            
+            chainPreview.style.background = materialColors[config.material] || 'var(--gradient-silver)';
+            chainPreview.textContent = config.style.toUpperCase().replace('-', ' ') + ' CHAIN';
+            
+            // Update chain details
+            const materialNames = {
+                'sterling-silver': 'Sterling Silver',
+                '14k-gold': '14K Gold',
+                '18k-gold': '18K Gold',
+                'platinum': 'Platinum',
+                'rose-gold': 'Rose Gold',
+                'steel': 'Stainless Steel'
+            };
+            
+            chainDetail.innerHTML = `${config.width}mm × ${config.length}"<br>${materialNames[config.material]}`;
+        }
+
+        // Update box display
+        function updateBoxDisplay() {
+            const config = currentConfig.box;
+            
+            // Update box colors
+            const colorSchemes = {
+                'black': 'linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%)',
+                'navy': 'linear-gradient(135deg, #14213D 0%, #1e2a4a 100%)',
+                'burgundy': 'linear-gradient(135deg, #800020 0%, #a0002a 100%)',
+                'forest': 'linear-gradient(135deg, #228B22 0%, #2aa52a 100%)',
+                'cream': 'linear-gradient(135deg, #F5F5DC 0%, #e8e8c8 100%)',
+                'white': 'linear-gradient(135deg, #FFFFFF 0%, #f0f0f0 100%)'
+            };
+            
+            document.querySelectorAll('.box-face').forEach(face => {
+                face.style.background = colorSchemes[config.color] || colorSchemes.black;
+            });
+
+            updateBoxText();
+        }
+
+        // Update box text
+        function updateBoxText() {
+            const customTextEl = document.getElementById('customBoxText');
+            if (customTextEl) {
+                customTextEl.textContent = currentConfig.box.customText || 'Custom Watch Collection';
+            }
+        }
+
+        // Box rotation functions
+        function rotateBox(direction) {
+            boxRotation += direction === 'left' ? -45 : 45;
+            document.getElementById('watchBox').style.transform = `rotateY(${boxRotation}deg) rotateX(-10deg)`;
+        }
+
+        function toggleRotation() {
+            autoRotate = !autoRotate;
+            const box = document.getElementById('watchBox');
+            
+            if (autoRotate) {
+                box.classList.add('rotating');
+            } else {
+                box.classList.remove('rotating');
+            }
+        }
+
+        function startAutoRotation() {
+            const box = document.getElementById('watchBox');
+            box.style.transform = 'rotateY(0deg) rotateX(-10deg)';
+        }
+
+        // Update pricing
+        function updatePricing() {
+            let total = 0;
+            const breakdown = [];
+
+            // Chain pricing
+            const chainPrice = chainPrices[currentConfig.chain.style] || 0;
+            const materialPrice = materialPrices[currentConfig.chain.material] || 0;
+            const totalChainPrice = chainPrice + materialPrice;
+            
+            breakdown.push({ name: currentConfig.chain.style.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase()) + ' Chain', price: chainPrice });
+            
+            if (materialPrice !== 0) {
+                const materialName = currentConfig.chain.material.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
+                breakdown.push({ name: materialName, price: materialPrice });
+            }
+
+            // Custom sizing
+            breakdown.push({ name: 'Custom Sizing', price: 0 });
+
+            // Box pricing
+            const boxPrice = boxPrices[currentConfig.box.style] || 0;
+            const interiorPrice = interiorPrices[currentConfig.box.interior] || 0;
+            
+            breakdown.push({ name: currentConfig.box.style.charAt(0).toUpperCase() + currentConfig.box.style.slice(1) + ' Watch Box', price: boxPrice });
+            
+            if (interiorPrice > 0) {
+                breakdown.push({ name: currentConfig.box.interior.charAt(0).toUpperCase() + currentConfig.box.interior.slice(1) + ' Interior', price: interiorPrice });
+            }
+
+            // Features
+            currentConfig.box.features.forEach(feature => {
+                const featurePrice = featurePrices[feature] || 0;
+                breakdown.push({ name: feature.charAt(0).toUpperCase() + feature.slice(1) + ' Feature', price: featurePrice });
+                total += featurePrice;
+            });
+
+            // Gift options
+            const giftPrice = giftPrices[currentConfig.box.gift] || 0;
+            if (giftPrice > 0) {
+                breakdown.push({ name: 'Gift Package', price: giftPrice });
+            }
+
+            // Engraving
+            if (currentConfig.chain.engraving && currentConfig.chain.engraving.length > 0) {
+                breakdown.push({ name: 'Chain Engraving', price: 25 });
+                total += 25;
+            }
+
+            // ASWAT MODS branding
+            breakdown.push({ name: 'ASWAT MODS Branding', price: 'Included' });
+
+            // Calculate total
+            total += totalChainPrice + boxPrice + interiorPrice + giftPrice;
+
+            // Update display
+            document.getElementById('totalPrice').textContent = `$${total.toFixed(2)}`;
+            
+            const breakdownEl = document.getElementById('priceBreakdown');
+            breakdownEl.innerHTML = '';
+            
+            breakdown.forEach(item => {
+                const priceText = typeof item.price === 'number' ? `$${item.price.toFixed(2)}` : item.price;
+                breakdownEl.innerHTML += `
+                    <div class="price-item">
+                        <span class="item-name">${item.name}</span>
+                        <span class="item-price">${priceText}</span>
+                    </div>
+                `;
+            });
+        }
+
+        // Action functions
+        function addToCart() {
+            showSuccessMessage('Custom chain and box added to cart! Your ASWAT MODS branded collection is ready for checkout.');
+        }
+
+        function saveDesign() {
+            const designData = JSON.stringify(currentConfig);
+            localStorage.setItem('chainAndBoxDesign', designData);
+            showSuccessMessage('Design saved successfully! Your custom chain and ASWAT MODS box configuration has been saved.');
+        }
+
+        function resetDesign() {
+            // Reset to default configuration
+            currentConfig = {
+                activeTab: 'chains',
+                chain: {
+                    style: 'cuban-link',
+                    material: 'sterling-silver',
+                    width: 6.0,
+                    length: 20,
+                    engraving: '',
+                    font: 'script'
+                },
+                box: {
+                    style: 'classic',
+                    color: 'black',
+                    colorName: 'Midnight Black',
+                    interior: 'velvet',
+                    customText: 'Custom Watch Collection',
+                    logoPosition: 'front',
+                    features: [],
+                    gift: 'none'
+                }
+            };
+
+            // Reset form inputs
+            document.getElementById('chainEngraving').value = '';
+            document.getElementById('boxText').value = 'Custom Watch Collection';
+            document.getElementById('chainWidth').value = 6;
+            document.getElementById('chainLength').value = 20;
+
+            // Reset visual selections
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+
+            // Set default selections
+            document.querySelector('[data-chain="cuban-link"]').classList.add('selected');
+            document.querySelector('[data-material="sterling-silver"]').classList.add('selected');
+            document.querySelector('[data-box="classic"]').classList.add('selected');
+            document.querySelector('[data-color="black"]').classList.add('selected');
+            document.querySelector('[data-interior="velvet"]').classList.add('selected');
+            document.querySelector('[data-logo="front"]').classList.add('selected');
+            document.querySelector('[data-gift="none"]').classList.add('selected');
+
+            updateDisplay();
+            updatePricing();
+        }
+
+        function shareDesign() {
+            const shareText = `Check out my custom chain and ASWAT MODS watch box design! Created with the Seiko Watch Customizer.`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'My Custom Chain & ASWAT MODS Box Design',
+                    text: shareText,
+                    url: window.location.href
+                });
+            } else {
+                navigator.clipboard.writeText(shareText);
+                showSuccessMessage('Design details copied to clipboard!');
+            }
+        }
+
+        function showSuccessMessage(message) {
+            const existingMessage = document.querySelector('.success-message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'success-message';
+            messageDiv.textContent = message;
+
+            const priceSection = document.querySelector('.price-summary');
+            priceSection.insertBefore(messageDiv, priceSection.firstChild);
+
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

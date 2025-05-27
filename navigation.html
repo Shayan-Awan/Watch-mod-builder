@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seiko Watch Customizer | Navigation Hub</title>
+    <meta name="description" content="Navigate through our complete Seiko watch customization platform. Design watches, create jewelry, upload outfits, and connect with our community.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #14213D;
+            --secondary: #E5E5E5;
+            --accent: #FCA311;
+            --background: #FFFFFF;
+            --text: #000000;
+            --highlight: #C9D8E4;
+            --success: #10B981;
+            --gradient-1: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            --gradient-2: linear-gradient(135deg, var(--highlight) 0%, var(--secondary) 100%);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--background);
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .logo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link:hover {
+            color: var(--accent);
+            background: rgba(252, 163, 17, 0.1);
+        }
+
+        .nav-link.active {
+            color: var(--primary);
+            background: var(--highlight);
+        }
+
+        .nav-icon {
+            font-size: 18px;
+        }
+
+        /* Dropdown Menu */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            padding: 16px 0;
+            min-width: 250px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            border: 1px solid var(--highlight);
+        }
+
+        .dropdown:hover .dropdown-content {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 12px 20px;
+            color: var(--text);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid var(--secondary);
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background: var(--gradient-2);
+            color: var(--primary);
+        }
+
+        .dropdown-title {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 14px;
+        }
+
+        .dropdown-desc {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-top: 2px;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--primary);
+            cursor: pointer;
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 70px);
+            background: white;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            padding: 20px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+
+        .mobile-nav-item {
+            margin-bottom: 16px;
+        }
+
+        .mobile-nav-link {
+            display: block;
+            padding: 12px 16px;
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .mobile-nav-link:hover {
+            background: var(--gradient-2);
+            color: var(--primary);
+        }
+
+        /* CTA Button */
+        .cta-button {
+            background: var(--gradient-1);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Page Content */
+        .content {
+            margin-top: 70px;
+            padding: 40px 24px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 80px 0;
+            background: var(--gradient-2);
+            border-radius: 20px;
+            margin-bottom: 40px;
+        }
+
+        .hero-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: var(--text);
+            opacity: 0.8;
+            margin-bottom: 32px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .page-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .page-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            border: 1px solid var(--highlight);
+        }
+
+        .page-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .card-description {
+            color: var(--text);
+            opacity: 0.8;
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .card-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .card-link:hover {
+            color: var(--primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .hero-title {
+                font-size: 36px;
+            }
+
+            .page-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 0 16px;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .hero-title {
+                font-size: 28px;
+            }
+
+            .page-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="homepage.html" class="logo">
+                <div class="logo-icon">SK</div>
+                SEIKO CUSTOMIZER
+            </a>
+
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="homepage.html" class="nav-link">
+                        <span class="nav-icon">🏠</span>
+                        Home
+                    </a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">⌚</span>
+                        Customize
+                        <span style="font-size: 12px;">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="/" class="dropdown-item">
+                            <div class="dropdown-title">3D Watch Builder</div>
+                            <div class="dropdown-desc">Interactive watch customization</div>
+                        </a>
+                        <a href="jewelry-designer.html" class="dropdown-item">
+                            <div class="dropdown-title">Jewelry Designer</div>
+                            <div class="dropdown-desc">Custom chains, bracelets & rings</div>
+                        </a>
+                        <a href="chain-and-box-designer.html" class="dropdown-item">
+                            <div class="dropdown-title">Chain & Box Designer</div>
+                            <div class="dropdown-desc">Custom chains & ASWAT MODS boxes</div>
+                        </a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">👔</span>
+                        Styling
+                        <span style="font-size: 12px;">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="outfit-creator.html" class="dropdown-item">
+                            <div class="dropdown-title">Outfit Creator</div>
+                            <div class="dropdown-desc">Virtual styling with 50+ combinations</div>
+                        </a>
+                        <a href="upload-outfit.html" class="dropdown-item">
+                            <div class="dropdown-title">Upload Your Outfit</div>
+                            <div class="dropdown-desc">AI-powered color extraction & styling</div>
+                        </a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">🏪</span>
+                        Catalog
+                        <span style="font-size: 12px;">▼</span>
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="parts-catalog.html" class="dropdown-item">
+                            <div class="dropdown-title">Parts Catalog</div>
+                            <div class="dropdown-desc">Browse 125+ premium components</div>
+                        </a>
+                        <a href="suppliers.html" class="dropdown-item">
+                            <div class="dropdown-title">Suppliers Network</div>
+                            <div class="dropdown-desc">90+ global supplier partners</div>
+                        </a>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a href="community-forum.html" class="nav-link">
+                        <span class="nav-icon">👥</span>
+                        Community
+                    </a>
+                </li>
+            </ul>
+
+            <a href="/" class="cta-button">
+                <span>🚀</span>
+                Start Customizing
+            </a>
+
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                ☰
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-nav-item">
+            <a href="homepage.html" class="mobile-nav-link">🏠 Home</a>
+        </div>
+        <div class="mobile-nav-item">
+            <a href="/" class="mobile-nav-link">⌚ 3D Watch Builder</a>
+        </div>
+        <div class="mobile-nav-item">
+            <a href="jewelry-designer.html" class="mobile-nav-link">💍 Jewelry Designer</a>
+        </div>
+        <div class="mobile-nav-item">
+            <a href="chain-and-box-designer.html" class="mobile-nav-link">📦 Chain & Box Designer</a>
+        </div>
+        <div class="mobile-nav-item">
+            <a href="outfit-creator.html" class="mobile-nav-link">👔 Outfit Creator</a>
+        </div>
+        <div class="mobile-nav-item">
+            <a href="upload-outfit.html" class="mobile-nav-link">📷 Upload Outfit</a>
+        </div>
+        <div class="mobile-nav-item">
+            <a href="parts-catalog.html" class="mobile-nav-link">🏪 Parts Catalog</a>
+        </div>
+        <div class="mobile-nav-item">
+            <a href="suppliers.html" class="mobile-nav-link">🌐 Suppliers</a>
+        </div>
+        <div class="mobile-nav-item">
+            <a href="community-forum.html" class="mobile-nav-link">👥 Community</a>
+        </div>
+    </div>
+
+    <!-- Page Content -->
+    <div class="content">
+        <div class="hero-section">
+            <h1 class="hero-title">Welcome to Seiko Customizer</h1>
+            <p class="hero-subtitle">Your complete platform for designing custom Seiko watches, jewelry, and styling. Explore all our tools and connect with the community.</p>
+            <a href="/" class="cta-button">
+                <span>⌚</span>
+                Start Your First Build
+            </a>
+        </div>
+
+        <div class="page-grid">
+            <div class="page-card">
+                <div class="card-icon">⌚</div>
+                <h3 class="card-title">3D Watch Builder</h3>
+                <p class="card-description">Design your perfect Seiko watch with our interactive 3D customizer. Mix and match cases, dials, hands, and bezels in real-time.</p>
+                <a href="/" class="card-link">Start Building →</a>
+            </div>
+
+            <div class="page-card">
+                <div class="card-icon">💍</div>
+                <h3 class="card-title">Jewelry Designer</h3>
+                <p class="card-description">Create custom jewelry to complement your watch. Design chains, bracelets, and rings with premium materials and personalization.</p>
+                <a href="jewelry-designer.html" class="card-link">Design Jewelry →</a>
+            </div>
+
+            <div class="page-card">
+                <div class="card-icon">📦</div>
+                <h3 class="card-title">Chain & Box Designer</h3>
+                <p class="card-description">Customize watch chains and design your personalized watch box featuring ASWAT MODS branding for the ultimate unboxing experience.</p>
+                <a href="chain-and-box-designer.html" class="card-link">Create Box →</a>
+            </div>
+
+            <div class="page-card">
+                <div class="card-icon">👔</div>
+                <h3 class="card-title">Virtual Outfit Creator</h3>
+                <p class="card-description">See how your watch looks with different outfits. Try 50+ clothing combinations with our virtual mannequin system.</p>
+                <a href="outfit-creator.html" class="card-link">Style Outfits →</a>
+            </div>
+
+            <div class="page-card">
+                <div class="card-icon">📷</div>
+                <h3 class="card-title">Upload Your Outfit</h3>
+                <p class="card-description">Upload photos of your actual outfits and our AI will extract colors to show how your watch complements your real wardrobe.</p>
+                <a href="upload-outfit.html" class="card-link">Upload Photo →</a>
+            </div>
+
+            <div class="page-card">
+                <div class="card-icon">🏪</div>
+                <h3 class="card-title">Parts Catalog</h3>
+                <p class="card-description">Browse our complete collection of 125+ premium watch components. Filter by compatibility, price, and style to find perfect parts.</p>
+                <a href="parts-catalog.html" class="card-link">Browse Parts →</a>
+            </div>
+
+            <div class="page-card">
+                <div class="card-icon">🌐</div>
+                <h3 class="card-title">Suppliers Network</h3>
+                <p class="card-description">Meet our trusted network of 90+ global suppliers. Learn about quality sourcing and authentic component partnerships.</p>
+                <a href="suppliers.html" class="card-link">View Suppliers →</a>
+            </div>
+
+            <div class="page-card">
+                <div class="card-icon">👥</div>
+                <h3 class="card-title">Community Forum</h3>
+                <p class="card-description">Share your designs, submit recommendations, and connect with fellow watch enthusiasts in our vibrant community.</p>
+                <a href="community-forum.html" class="card-link">Join Community →</a>
+            </div>
+
+            <div class="page-card">
+                <div class="card-icon">🤖</div>
+                <h3 class="card-title">AI Chatbot Assistant</h3>
+                <p class="card-description">Get instant help with customization questions, compatibility checks, and personalized recommendations from our AI assistant.</p>
+                <a href="#" class="card-link" onclick="openChatbot()">Chat Now →</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(e) {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const toggleButton = document.querySelector('.mobile-menu-toggle');
+            
+            if (!mobileMenu.contains(e.target) && !toggleButton.contains(e.target)) {
+                mobileMenu.classList.remove('active');
+            }
+        });
+
+        // Chatbot function
+        function openChatbot() {
+            alert('Chatbot feature coming soon! For now, you can explore all our customization tools through the navigation menu.');
+        }
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+                navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.15)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+                navbar.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
+            }
+        });
+
+        // Highlight current page in navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPage = window.location.pathname.split('/').pop();
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

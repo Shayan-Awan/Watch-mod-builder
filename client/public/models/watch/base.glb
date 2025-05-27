@@ -1,0 +1,1 @@
+This is a placeholder for the 3D model file. In a real implementation, this would be a binary GLB file containing the base watch model that can be customized. Since binary files can't be included directly, you would need to provide this file separately.

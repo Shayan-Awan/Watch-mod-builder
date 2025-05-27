@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Your Outfit | Seiko Watch Customizer</title>
+    <meta name="description" content="Upload photos of your actual outfits and see how your custom Seiko watch looks with your real wardrobe. AI-powered color extraction and virtual styling.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #14213D;
+            --secondary: #E5E5E5;
+            --accent: #FCA311;
+            --background: #FFFFFF;
+            --text: #000000;
+            --highlight: #C9D8E4;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --gradient-1: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            --gradient-2: linear-gradient(135deg, var(--highlight) 0%, var(--secondary) 100%);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--background);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+        }
+
+        .logo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .breadcrumb {
+            color: var(--text);
+            opacity: 0.7;
+            font-size: 14px;
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* Main Layout */
+        .main-content {
+            display: grid;
+            grid-template-columns: 400px 1fr 350px;
+            gap: 32px;
+            padding: 32px 0;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Upload Panel */
+        .upload-panel {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+            height: fit-content;
+            position: sticky;
+            top: 120px;
+        }
+
+        .panel-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .upload-zone {
+            border: 2px dashed var(--highlight);
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--gradient-2);
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-zone:hover {
+            border-color: var(--accent);
+            background: rgba(252, 163, 17, 0.1);
+        }
+
+        .upload-zone.dragover {
+            border-color: var(--accent);
+            background: rgba(252, 163, 17, 0.2);
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .upload-text {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .upload-subtext {
+            font-size: 14px;
+            color: var(--text);
+            opacity: 0.7;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .uploaded-image {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .image-info {
+            background: var(--gradient-2);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 16px;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .info-label {
+            font-weight: 500;
+            color: var(--primary);
+        }
+
+        .info-value {
+            color: var(--text);
+            opacity: 0.8;
+        }
+
+        /* Color Extraction */
+        .color-extraction {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            border: 1px solid var(--highlight);
+        }
+
+        .extraction-title {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .color-swatch {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .color-swatch:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-md);
+        }
+
+        .color-swatch.selected {
+            border-color: var(--accent);
+            transform: scale(1.1);
+        }
+
+        .color-swatch::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 12px;
+            height: 12px;
+            background: var(--success);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .color-swatch.selected::after {
+            opacity: 1;
+        }
+
+        .mapping-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .mapping-button {
+            background: var(--highlight);
+            border: 1px solid var(--primary);
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .mapping-button:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .mapping-button.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .process-button {
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 16px;
+        }
+
+        .process-button:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .process-button:disabled {
+            background: var(--secondary);
+            color: var(--text);
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Virtual Mannequin */
+        .mannequin-container {
+            background: var(--gradient-2);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .mannequin-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .mannequin-subtitle {
+            color: var(--text);
+            opacity: 0.7;
+            margin-bottom: 32px;
+        }
+
+        .virtual-torso {
+            width: 300px;
+            height: 400px;
+            margin: 0 auto;
+            position: relative;
+            background: linear-gradient(135deg, #f5deb3 0%, #deb887 100%);
+            border-radius: 150px 150px 60px 60px;
+            box-shadow: inset 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.5s ease;
+        }
+
+        /* Clothing Layers */
+        .clothing-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: inherit;
+            transition: all 0.5s ease;
+            opacity: 0;
+        }
+
+        .clothing-layer.active {
+            opacity: 1;
+        }
+
+        .shirt-layer {
+            clip-path: polygon(20% 25%, 80% 25%, 85% 45%, 85% 80%, 15% 80%, 15% 45%);
+        }
+
+        .jacket-layer {
+            clip-path: polygon(15% 30%, 85% 30%, 90% 50%, 90% 85%, 10% 85%, 10% 50%);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .accessory-layer {
+            clip-path: polygon(45% 25%, 55% 25%, 52% 70%, 48% 70%);
+            width: 20px;
+            height: 180px;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 60px;
+        }
+
+        /* Watch Position */
+        .watch-position {
+            position: absolute;
+            right: 20px;
+            top: 45%;
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 4px solid var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: white;
+            font-weight: 600;
+            box-shadow: var(--shadow-md);
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .watch-position:hover {
+            transform: scale(1.1);
+        }
+
+        .watch-hands {
+            position: absolute;
+            width: 2px;
+            height: 20px;
+            background: white;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .watch-hands::after {
+            content: '';
+            position: absolute;
+            width: 1px;
+            height: 15px;
+            background: var(--accent);
+            top: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Analysis Panel */
+        .analysis-panel {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+            height: fit-content;
+            position: sticky;
+            top: 120px;
+        }
+
+        .analysis-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .outfit-analysis {
+            background: var(--gradient-2);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .analysis-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(20, 33, 61, 0.1);
+        }
+
+        .analysis-item:last-child {
+            border-bottom: none;
+        }
+
+        .analysis-label {
+            font-weight: 500;
+            color: var(--primary);
+            font-size: 14px;
+        }
+
+        .analysis-value {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .extracted-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .confidence-bar {
+            width: 80px;
+            height: 6px;
+            background: var(--secondary);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: var(--success);
+            transition: width 0.5s ease;
+        }
+
+        .watch-recommendations {
+            margin-top: 20px;
+        }
+
+        .recommendation-title {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .watch-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .watch-recommendation {
+            background: var(--highlight);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .watch-recommendation:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .watch-recommendation.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .recommendation-score {
+            background: var(--accent);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-top: 4px;
+            display: inline-block;
+        }
+
+        /* Progress Indicator */
+        .progress-container {
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--secondary);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            transition: width 0.5s ease;
+            border-radius: 4px;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 8px;
+            font-size: 14px;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        /* Loading States */
+        .loading {
+            position: relative;
+            opacity: 0.7;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .upload-panel,
+            .analysis-panel {
+                position: static;
+            }
+
+            .virtual-torso {
+                width: 250px;
+                height: 350px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .virtual-torso {
+                width: 200px;
+                height: 300px;
+            }
+
+            .watch-position {
+                width: 40px;
+                height: 40px;
+                right: 15px;
+                font-size: 8px;
+            }
+
+            .color-palette {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .watch-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .success-message {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 16px 0;
+            color: var(--success);
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--danger);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 16px 0;
+            color: var(--danger);
+            font-weight: 500;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav container">
+            <a href="#" class="logo">SEIKO CUSTOMIZER</a>
+            <div class="breadcrumb">
+                <a href="homepage.html">Home</a> / <a href="outfit-creator.html">Outfit Creator</a> / Upload Outfit
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-content">
+            <!-- Upload Panel -->
+            <aside class="upload-panel">
+                <h2 class="panel-title">Upload Your Outfit</h2>
+                
+                <div class="upload-zone" id="uploadZone">
+                    <div class="upload-icon">📷</div>
+                    <div class="upload-text">Drop your outfit photo here</div>
+                    <div class="upload-subtext">or click to browse files<br>JPG, PNG up to 10MB</div>
+                </div>
+                
+                <input type="file" id="fileInput" class="file-input" accept="image/*">
+                
+                <div id="imagePreview" style="display: none;">
+                    <img id="uploadedImage" class="uploaded-image" alt="Uploaded outfit">
+                    <div class="image-info">
+                        <div class="info-item">
+                            <span class="info-label">File name:</span>
+                            <span class="info-value" id="fileName"></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">File size:</span>
+                            <span class="info-value" id="fileSize"></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Dimensions:</span>
+                            <span class="info-value" id="imageDimensions"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="color-extraction" id="colorExtraction" style="display: none;">
+                    <div class="extraction-title">Extracted Colors</div>
+                    <div class="color-palette" id="colorPalette">
+                        <!-- Colors will be populated here -->
+                    </div>
+                    <div class="mapping-controls">
+                        <button class="mapping-button" data-part="shirt">Shirt</button>
+                        <button class="mapping-button" data-part="jacket">Jacket</button>
+                        <button class="mapping-button" data-part="accessory">Accessory</button>
+                        <button class="mapping-button" data-part="accent">Accent</button>
+                    </div>
+                    <button class="process-button" id="processButton" onclick="applyToMannequin()">Apply to Mannequin</button>
+                </div>
+
+                <div class="progress-container" id="progressContainer" style="display: none;">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-text" id="progressText">Processing image...</div>
+                </div>
+            </aside>
+
+            <!-- Virtual Mannequin -->
+            <main class="mannequin-container">
+                <h1 class="mannequin-title">Your Custom Outfit</h1>
+                <p class="mannequin-subtitle">See how your Seiko watch complements your actual wardrobe</p>
+                
+                <div class="virtual-torso" id="virtualTorso">
+                    <!-- Clothing layers -->
+                    <div class="clothing-layer shirt-layer" id="shirtLayer"></div>
+                    <div class="clothing-layer jacket-layer" id="jacketLayer"></div>
+                    <div class="clothing-layer accessory-layer" id="accessoryLayer"></div>
+                    
+                    <!-- Watch position -->
+                    <div class="watch-position" id="watchPosition">
+                        <div class="watch-hands"></div>
+                        SEIKO
+                    </div>
+                </div>
+
+                <div style="margin-top: 32px; display: flex; justify-content: center; gap: 16px;">
+                    <button class="process-button" style="width: auto; padding: 12px 24px;" onclick="saveOutfitCombo()">Save Combo</button>
+                    <button class="process-button" style="width: auto; padding: 12px 24px; background: var(--primary);" onclick="shareOutfitCombo()">Share</button>
+                </div>
+            </main>
+
+            <!-- Analysis Panel -->
+            <aside class="analysis-panel">
+                <h2 class="analysis-title">Outfit Analysis</h2>
+                
+                <div class="outfit-analysis" id="outfitAnalysis">
+                    <div class="analysis-item">
+                        <span class="analysis-label">Primary Color</span>
+                        <div class="analysis-value">
+                            <div class="extracted-color" id="primaryColor" style="background: var(--secondary);"></div>
+                            <div class="confidence-bar">
+                                <div class="confidence-fill" id="primaryConfidence" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="analysis-item">
+                        <span class="analysis-label">Secondary Color</span>
+                        <div class="analysis-value">
+                            <div class="extracted-color" id="secondaryColor" style="background: var(--secondary);"></div>
+                            <div class="confidence-bar">
+                                <div class="confidence-fill" id="secondaryConfidence" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="analysis-item">
+                        <span class="analysis-label">Accent Color</span>
+                        <div class="analysis-value">
+                            <div class="extracted-color" id="accentColor" style="background: var(--secondary);"></div>
+                            <div class="confidence-bar">
+                                <div class="confidence-fill" id="accentConfidence" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="analysis-item">
+                        <span class="analysis-label">Style Match</span>
+                        <div class="analysis-value">
+                            <span id="styleMatch">Upload image to analyze</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="watch-recommendations">
+                    <div class="recommendation-title">Recommended Watches</div>
+                    <div class="watch-grid">
+                        <div class="watch-recommendation" data-watch="skx007">
+                            SKX007
+                            <div class="recommendation-score" id="skx007Score">--%</div>
+                        </div>
+                        <div class="watch-recommendation" data-watch="sarb033">
+                            SARB033
+                            <div class="recommendation-score" id="sarb033Score">--%</div>
+                        </div>
+                        <div class="watch-recommendation" data-watch="turtle">
+                            Turtle
+                            <div class="recommendation-score" id="turtleScore">--%</div>
+                        </div>
+                        <div class="watch-recommendation" data-watch="presage">
+                            Presage
+                            <div class="recommendation-score" id="presageScore">--%</div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let uploadedImage = null;
+        let extractedColors = [];
+        let colorMapping = {
+            shirt: null,
+            jacket: null,
+            accessory: null,
+            accent: null
+        };
+        let selectedColorPart = null;
+        let currentWatch = 'skx007';
+
+        // Watch color schemes
+        const watchColors = {
+            'skx007': '#14213D',
+            'sarb033': '#C0C0C0', 
+            'turtle': '#000000',
+            'presage': '#DDCCA3'
+        };
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+        });
+
+        // Setup event listeners
+        function setupEventListeners() {
+            const uploadZone = document.getElementById('uploadZone');
+            const fileInput = document.getElementById('fileInput');
+
+            // Upload zone events
+            uploadZone.addEventListener('click', () => fileInput.click());
+            uploadZone.addEventListener('dragover', handleDragOver);
+            uploadZone.addEventListener('dragleave', handleDragLeave);
+            uploadZone.addEventListener('drop', handleDrop);
+
+            // File input change
+            fileInput.addEventListener('change', handleFileSelect);
+
+            // Color mapping buttons
+            document.querySelectorAll('.mapping-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    selectColorPart(this.dataset.part);
+                });
+            });
+
+            // Watch recommendations
+            document.querySelectorAll('.watch-recommendation').forEach(watch => {
+                watch.addEventListener('click', function() {
+                    selectWatch(this.dataset.watch);
+                });
+            });
+        }
+
+        // Drag and drop handlers
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.currentTarget.classList.add('dragover');
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.currentTarget.classList.remove('dragover');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.currentTarget.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                processFile(files[0]);
+            }
+        }
+
+        // File selection handler
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                processFile(file);
+            }
+        }
+
+        // Process uploaded file
+        function processFile(file) {
+            // Validate file
+            if (!file.type.startsWith('image/')) {
+                showError('Please upload a valid image file (JPG, PNG)');
+                return;
+            }
+
+            if (file.size > 10 * 1024 * 1024) {
+                showError('File size must be less than 10MB');
+                return;
+            }
+
+            // Show progress
+            showProgress('Loading image...', 20);
+
+            // Read file
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                uploadedImage = e.target.result;
+                displayImage(file);
+                extractColors();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Display uploaded image
+        function displayImage(file) {
+            const img = document.getElementById('uploadedImage');
+            const preview = document.getElementById('imagePreview');
+            
+            img.src = uploadedImage;
+            preview.style.display = 'block';
+
+            // Update file info
+            document.getElementById('fileName').textContent = file.name;
+            document.getElementById('fileSize').textContent = formatFileSize(file.size);
+
+            // Get image dimensions
+            img.onload = function() {
+                document.getElementById('imageDimensions').textContent = `${this.naturalWidth} × ${this.naturalHeight}`;
+                showProgress('Analyzing colors...', 50);
+            };
+        }
+
+        // Extract colors from image using Canvas API
+        function extractColors() {
+            const img = document.getElementById('uploadedImage');
+            
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // Resize for faster processing
+                const maxSize = 200;
+                const ratio = Math.min(maxSize / img.naturalWidth, maxSize / img.naturalHeight);
+                canvas.width = img.naturalWidth * ratio;
+                canvas.height = img.naturalHeight * ratio;
+                
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                
+                // Get image data
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imageData.data;
+                
+                // Extract dominant colors
+                extractedColors = getDominantColors(data, 8);
+                displayColorPalette();
+                analyzeOutfit();
+                
+                showProgress('Processing complete!', 100);
+                setTimeout(() => {
+                    document.getElementById('progressContainer').style.display = 'none';
+                }, 1000);
+            };
+        }
+
+        // Get dominant colors from image data
+        function getDominantColors(data, numColors) {
+            const colorCounts = {};
+            
+            // Sample pixels (every 4th pixel for performance)
+            for (let i = 0; i < data.length; i += 16) {
+                const r = data[i];
+                const g = data[i + 1];
+                const b = data[i + 2];
+                const alpha = data[i + 3];
+                
+                // Skip transparent pixels
+                if (alpha < 128) continue;
+                
+                // Quantize colors to reduce noise
+                const qR = Math.floor(r / 32) * 32;
+                const qG = Math.floor(g / 32) * 32;
+                const qB = Math.floor(b / 32) * 32;
+                
+                const color = `rgb(${qR},${qG},${qB})`;
+                colorCounts[color] = (colorCounts[color] || 0) + 1;
+            }
+            
+            // Sort by frequency and return top colors
+            return Object.entries(colorCounts)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, numColors)
+                .map(([color, count]) => ({
+                    color,
+                    count,
+                    hex: rgbToHex(color)
+                }));
+        }
+
+        // Convert RGB to HEX
+        function rgbToHex(rgb) {
+            const match = rgb.match(/rgb\((\d+),(\d+),(\d+)\)/);
+            if (!match) return '#000000';
+            
+            const r = parseInt(match[1]);
+            const g = parseInt(match[2]);
+            const b = parseInt(match[3]);
+            
+            return '#' + [r, g, b].map(x => {
+                const hex = x.toString(16);
+                return hex.length === 1 ? '0' + hex : hex;
+            }).join('');
+        }
+
+        // Display color palette
+        function displayColorPalette() {
+            const palette = document.getElementById('colorPalette');
+            palette.innerHTML = '';
+            
+            extractedColors.forEach((colorData, index) => {
+                const swatch = document.createElement('div');
+                swatch.className = 'color-swatch';
+                swatch.style.backgroundColor = colorData.color;
+                swatch.dataset.colorIndex = index;
+                swatch.addEventListener('click', () => selectColor(index));
+                palette.appendChild(swatch);
+            });
+            
+            document.getElementById('colorExtraction').style.display = 'block';
+        }
+
+        // Select color for mapping
+        function selectColor(colorIndex) {
+            if (!selectedColorPart) {
+                showError('Please select a clothing part first (Shirt, Jacket, etc.)');
+                return;
+            }
+            
+            // Update visual selection
+            document.querySelectorAll('.color-swatch').forEach(swatch => {
+                swatch.classList.remove('selected');
+            });
+            document.querySelector(`[data-color-index="${colorIndex}"]`).classList.add('selected');
+            
+            // Map color to part
+            colorMapping[selectedColorPart] = extractedColors[colorIndex];
+            
+            // Update button text
+            const button = document.querySelector(`[data-part="${selectedColorPart}"]`);
+            button.textContent = `${selectedColorPart.charAt(0).toUpperCase() + selectedColorPart.slice(1)} ✓`;
+            button.classList.add('active');
+            
+            // Clear selection
+            selectedColorPart = null;
+            document.querySelectorAll('.mapping-button').forEach(btn => {
+                if (!btn.classList.contains('active')) {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        // Select color part for mapping
+        function selectColorPart(part) {
+            selectedColorPart = part;
+            
+            // Update visual selection
+            document.querySelectorAll('.mapping-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-part="${part}"]`).classList.add('active');
+        }
+
+        // Apply colors to mannequin
+        function applyToMannequin() {
+            const shirtLayer = document.getElementById('shirtLayer');
+            const jacketLayer = document.getElementById('jacketLayer');
+            const accessoryLayer = document.getElementById('accessoryLayer');
+            
+            // Apply mapped colors
+            if (colorMapping.shirt) {
+                shirtLayer.style.background = colorMapping.shirt.color;
+                shirtLayer.classList.add('active');
+            }
+            
+            if (colorMapping.jacket) {
+                jacketLayer.style.background = colorMapping.jacket.color;
+                jacketLayer.classList.add('active');
+            }
+            
+            if (colorMapping.accessory) {
+                accessoryLayer.style.background = colorMapping.accessory.color;
+                accessoryLayer.classList.add('active');
+            }
+            
+            showSuccess('Outfit applied to mannequin successfully!');
+            updateAnalysisDisplay();
+        }
+
+        // Analyze outfit and recommend watches
+        function analyzeOutfit() {
+            if (extractedColors.length === 0) return;
+            
+            // Update analysis display
+            const primaryColor = extractedColors[0];
+            const secondaryColor = extractedColors[1] || extractedColors[0];
+            const accentColor = extractedColors[2] || extractedColors[0];
+            
+            document.getElementById('primaryColor').style.background = primaryColor.color;
+            document.getElementById('primaryConfidence').style.width = '90%';
+            
+            document.getElementById('secondaryColor').style.background = secondaryColor.color;
+            document.getElementById('secondaryConfidence').style.width = '75%';
+            
+            document.getElementById('accentColor').style.background = accentColor.color;
+            document.getElementById('accentConfidence').style.width = '60%';
+            
+            // Determine style match
+            const styleMatch = determineStyleMatch(extractedColors);
+            document.getElementById('styleMatch').textContent = styleMatch;
+            
+            // Calculate watch recommendations
+            calculateWatchRecommendations(extractedColors);
+        }
+
+        // Determine style match based on colors
+        function determineStyleMatch(colors) {
+            const darkColors = colors.filter(c => isDarkColor(c.hex)).length;
+            const lightColors = colors.filter(c => isLightColor(c.hex)).length;
+            const brightColors = colors.filter(c => isBrightColor(c.hex)).length;
+            
+            if (darkColors > lightColors && brightColors === 0) {
+                return 'Formal/Business';
+            } else if (brightColors > 2) {
+                return 'Casual/Sporty';
+            } else {
+                return 'Smart Casual';
+            }
+        }
+
+        // Color analysis helpers
+        function isDarkColor(hex) {
+            const r = parseInt(hex.substr(1, 2), 16);
+            const g = parseInt(hex.substr(3, 2), 16);
+            const b = parseInt(hex.substr(5, 2), 16);
+            const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+            return brightness < 128;
+        }
+
+        function isLightColor(hex) {
+            return !isDarkColor(hex);
+        }
+
+        function isBrightColor(hex) {
+            const r = parseInt(hex.substr(1, 2), 16);
+            const g = parseInt(hex.substr(3, 2), 16);
+            const b = parseInt(hex.substr(5, 2), 16);
+            const saturation = Math.max(r, g, b) - Math.min(r, g, b);
+            return saturation > 100;
+        }
+
+        // Calculate watch recommendations
+        function calculateWatchRecommendations(colors) {
+            const recommendations = {
+                'skx007': 85,
+                'sarb033': 78,
+                'turtle': 92,
+                'presage': 71
+            };
+            
+            // Adjust based on color analysis
+            const darkColors = colors.filter(c => isDarkColor(c.hex)).length;
+            const brightColors = colors.filter(c => isBrightColor(c.hex)).length;
+            
+            if (darkColors > 4) {
+                recommendations['sarb033'] += 15;
+                recommendations['presage'] += 10;
+            }
+            
+            if (brightColors > 2) {
+                recommendations['skx007'] += 10;
+                recommendations['turtle'] += 8;
+            }
+            
+            // Update display
+            Object.entries(recommendations).forEach(([watch, score]) => {
+                document.getElementById(`${watch}Score`).textContent = `${Math.min(score, 99)}%`;
+            });
+        }
+
+        // Select watch
+        function selectWatch(watchId) {
+            currentWatch = watchId;
+            
+            // Update visual selection
+            document.querySelectorAll('.watch-recommendation').forEach(rec => {
+                rec.classList.remove('selected');
+            });
+            document.querySelector(`[data-watch="${watchId}"]`).classList.add('selected');
+            
+            // Update watch on mannequin
+            const watchPosition = document.getElementById('watchPosition');
+            watchPosition.style.background = watchColors[watchId];
+        }
+
+        // Update analysis display
+        function updateAnalysisDisplay() {
+            // Update colors in analysis panel based on mapping
+            if (colorMapping.shirt) {
+                document.getElementById('primaryColor').style.background = colorMapping.shirt.color;
+            }
+            if (colorMapping.jacket) {
+                document.getElementById('secondaryColor').style.background = colorMapping.jacket.color;
+            }
+            if (colorMapping.accent) {
+                document.getElementById('accentColor').style.background = colorMapping.accent.color;
+            }
+        }
+
+        // Utility functions
+        function showProgress(text, percentage) {
+            const container = document.getElementById('progressContainer');
+            const fill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            
+            container.style.display = 'block';
+            fill.style.width = percentage + '%';
+            progressText.textContent = text;
+        }
+
+        function showSuccess(message) {
+            showMessage(message, 'success');
+        }
+
+        function showError(message) {
+            showMessage(message, 'error');
+        }
+
+        function showMessage(message, type) {
+            const existingMessage = document.querySelector('.success-message, .error-message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `${type}-message`;
+            messageDiv.textContent = message;
+            
+            const uploadPanel = document.querySelector('.upload-panel');
+            uploadPanel.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 5000);
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Save and share functions
+        function saveOutfitCombo() {
+            const outfitData = {
+                colorMapping,
+                extractedColors,
+                currentWatch,
+                timestamp: new Date().toISOString()
+            };
+            
+            localStorage.setItem('uploadedOutfit', JSON.stringify(outfitData));
+            showSuccess('Outfit combination saved successfully!');
+        }
+
+        function shareOutfitCombo() {
+            const shareText = `Check out my custom outfit combination with my Seiko ${currentWatch.toUpperCase()}! Created with the Seiko Watch Customizer.`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'My Custom Watch Outfit',
+                    text: shareText,
+                    url: window.location.href
+                });
+            } else {
+                navigator.clipboard.writeText(shareText);
+                showSuccess('Outfit details copied to clipboard!');
+            }
+        }
+    </script>
+</body>
+</html>

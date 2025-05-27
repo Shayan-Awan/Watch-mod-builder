@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parts Catalog | Seiko Watch Customizer</title>
+    <meta name="description" content="Browse our complete collection of Seiko watch parts - cases, dials, hands, bezels, and more. Over 125 premium components for your custom timepiece.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #14213D;
+            --secondary: #E5E5E5;
+            --accent: #FCA311;
+            --background: #FFFFFF;
+            --text: #000000;
+            --highlight: #C9D8E4;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--background);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        .header {
+            background: var(--background);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+        }
+
+        .logo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .breadcrumb {
+            color: var(--text);
+            opacity: 0.7;
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            padding: 64px 0;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .page-header p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            margin-top: 32px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        /* Filters */
+        .filters {
+            background: var(--secondary);
+            padding: 32px 0;
+            border-bottom: 1px solid var(--highlight);
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .filter-group label {
+            font-weight: 500;
+            color: var(--primary);
+        }
+
+        .filter-select {
+            padding: 8px 16px;
+            border: 1px solid var(--highlight);
+            border-radius: 6px;
+            background: white;
+            font-family: inherit;
+            color: var(--text);
+        }
+
+        .search-box {
+            padding: 12px 16px;
+            border: 1px solid var(--highlight);
+            border-radius: 6px;
+            background: white;
+            font-family: inherit;
+            width: 300px;
+            max-width: 100%;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .tab-button {
+            padding: 12px 24px;
+            border: none;
+            background: white;
+            color: var(--text);
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid var(--highlight);
+        }
+
+        .tab-button.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .tab-button:hover {
+            background: var(--highlight);
+        }
+
+        .tab-button.active:hover {
+            background: var(--primary);
+        }
+
+        /* Parts Grid */
+        .parts-section {
+            padding: 48px 0;
+        }
+
+        .section-header {
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .section-description {
+            color: var(--text);
+            opacity: 0.7;
+        }
+
+        .parts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 64px;
+        }
+
+        .part-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid var(--highlight);
+            position: relative;
+        }
+
+        .part-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        .part-image {
+            height: 200px;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--highlight) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .part-visual {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .part-visual.case {
+            background: linear-gradient(135deg, #C0C0C0, #E5E5E5);
+            color: var(--primary);
+            border: 4px solid var(--accent);
+        }
+
+        .part-visual.dial {
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .part-visual.dial::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .part-visual.hands {
+            background: linear-gradient(135deg, #C0C0C0, #E5E5E5);
+            color: var(--primary);
+        }
+
+        .part-visual.hands::before {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 40px;
+            background: var(--primary);
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .part-visual.hands::after {
+            content: '';
+            position: absolute;
+            width: 1px;
+            height: 50px;
+            background: var(--accent);
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .part-visual.bezel {
+            background: linear-gradient(135deg, #C0C0C0, #E5E5E5);
+            color: var(--primary);
+            border: 8px solid var(--primary);
+        }
+
+        .part-info {
+            padding: 20px;
+        }
+
+        .part-header {
+            display: flex;
+            justify-content: between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .part-name {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .part-description {
+            font-size: 14px;
+            color: var(--text);
+            opacity: 0.7;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+
+        .part-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .detail-tag {
+            background: var(--highlight);
+            color: var(--primary);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .part-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .part-price {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .add-button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .add-button:hover {
+            background: var(--accent);
+        }
+
+        .compatibility-indicator {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        /* Color variants */
+        .color-black { background: #000000; }
+        .color-blue { background: #14213D; }
+        .color-green { background: #285943; }
+        .color-white { background: #FFFFFF; border: 2px solid #E5E5E5; }
+        .color-cream { background: #F5EFE0; }
+        .color-orange { background: #FCA311; }
+        .color-silver { background: #C0C0C0; }
+        .color-gold { background: #DDCCA3; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 36px;
+            }
+
+            .stats {
+                gap: 24px;
+            }
+
+            .filter-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .parts-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 16px;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav container">
+            <a href="#" class="logo">SEIKO CUSTOMIZER</a>
+            <div class="breadcrumb">
+                <a href="homepage.html">Home</a> / Parts Catalog
+            </div>
+        </nav>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Complete Parts Catalog</h1>
+            <p>Explore our extensive collection of premium Seiko watch components and compatible modifications. Each part is carefully selected for quality, authenticity, and compatibility.</p>
+            <div class="stats">
+                <div class="stat">
+                    <span class="stat-number">125+</span>
+                    <span class="stat-label">Total Parts</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">4</span>
+                    <span class="stat-label">Categories</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">15+</span>
+                    <span class="stat-label">Watch Models</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filters -->
+    <section class="filters">
+        <div class="container">
+            <div class="filter-controls">
+                <div class="filter-group">
+                    <label for="search">Search:</label>
+                    <input type="text" id="search" class="search-box" placeholder="Search parts by name, model, or material...">
+                </div>
+                <div class="filter-group">
+                    <label for="sort">Sort by:</label>
+                    <select id="sort" class="filter-select">
+                        <option value="name">Name</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="newest">Newest First</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="compatibility">Compatibility:</label>
+                    <select id="compatibility" class="filter-select">
+                        <option value="all">All Models</option>
+                        <option value="skx007">SKX007</option>
+                        <option value="sarb033">SARB033</option>
+                        <option value="turtle">Turtle</option>
+                        <option value="presage">Presage</option>
+                    </select>
+                </div>
+            </div>
+            <div class="filter-tabs">
+                <button class="tab-button active" data-category="all">All Parts (125+)</button>
+                <button class="tab-button" data-category="case">Cases (32)</button>
+                <button class="tab-button" data-category="dial">Dials (38)</button>
+                <button class="tab-button" data-category="hands">Hands (28)</button>
+                <button class="tab-button" data-category="bezel">Bezels (27)</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cases Section -->
+    <section class="parts-section" id="cases">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Watch Cases (32 items)</h2>
+                <p class="section-description">Premium stainless steel cases from iconic Seiko models and compatible aftermarket options.</p>
+            </div>
+            <div class="parts-grid" data-category="case">
+                <!-- SKX Series Cases -->
+                <div class="part-card" data-name="SKX007 Classic Case" data-price="89.99" data-compatibility="skx007">
+                    <div class="part-image">
+                        <div class="part-visual case">SKX</div>
+                        <div class="compatibility-indicator">Universal</div>
+                    </div>
+                    <div class="part-info">
+                        <h3 class="part-name">SKX007 Classic Case</h3>
+                        <p class="part-description">The legendary diver's case with 42.5mm diameter, 200m water resistance, and crown at 4 o'clock position.</p>
+                        <div class="part-details">
+                            <span class="detail-tag">Stainless Steel</span>
+                            <span class="detail-tag">42.5mm</span>
+                            <span class="detail-tag">200m WR</span>
+                        </div>
+                        <div class="part-footer">
+                            <span class="part-price">$89.99</span>
+                            <button class="add-button">Add to Build</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="part-card" data-name="SKX009 Pepsi Case" data-price="94.99" data-compatibility="skx007">
+                    <div class="part-image">
+                        <div class="part-visual case">009</div>
+                    </div>
+                    <div class="part-info">
+                        <h3 class="part-name">SKX009 Pepsi Case</h3>
+                        <p class="part-description">Classic SKX case with red and blue bezel insert, perfect for GMT-style builds.</p>
+                        <div class="part-details">
+                            <span class="detail-tag">Stainless Steel</span>
+                            <span class="detail-tag">42.5mm</span>
+                            <span class="detail-tag">Pepsi Colors</span>
+                        </div>
+                        <div class="part-footer">
+                            <span class="part-price">$94.99</span>
+                            <button class="add-button">Add to Build</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SARB Series Cases -->
+                <div class="part-card" data-name="SARB033 Dress Case" data-price="119.99" data-compatibility="sarb033">
+                    <div class="part-image">
+                        <div class="part-visual case">033</div>
+                    </div>
+                    <div class="part-info">
+                        <h3 class="part-name">SARB033 Dress Case</h3>
+                        <p class="part-description">Elegant 38mm dress watch case with display caseback and refined finishing.</p>
+                        <div class="part-details">
+                            <span class="detail-tag">Stainless Steel</span>
+                            <span class="detail-tag">38mm</span>
+                            <span class="detail-tag">Display Back</span>
+                        </div>
+                        <div class="part-footer">
+                            <span class="part-price">$119.99</span>
+                            <button class="add-button">Add to Build</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="part-card" data-name="SARB035 White Dial Case" data-price="124.99" data-compatibility="sarb033">
+                    <div class="part-image">
+                        <div class="part-visual case">035</div>
+                    </div>
+                    <div class="part-info">
+                        <h3 class="part-name">SARB035 White Dial Case</h3>
+                        <p class="part-description">Premium dress case with cream white dial compatibility and polished finish.</p>
+                        <div class="part-details">
+                            <span class="detail-tag">Stainless Steel</span>
+                            <span class="detail-tag">38mm</span>
+                            <span class="detail-tag">Polished</span>
+                        </div>
+                        <div class="part-footer">
+                            <span class="part-price">$124.99</span>
+                            <button class="add-button">Add to Build</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Turtle Series Cases -->
+                <div class="part-card" data-name="SRP777 Turtle Case" data-price="99.99" data-compatibility="turtle">
+                    <div class="part-image">
+                        <div class="part-visual case">777</div>
+                    </div>
+                    <div class="part-info">
+                        <h3 class="part-name">SRP777 Turtle Case</h3>
+                        <p class="part-description">Iconic cushion-shaped case with 44mm profile and 200m water resistance.</p>
+                        <div class="part-details">
+                            <span class="detail-tag">Stainless Steel</span>
+                            <span class="detail-tag">44mm</span>
+                            <span class="detail-tag">Cushion Shape</span>
+                        </div>
+                        <div class="part-footer">
+                            <span class="part-price">$99.99</span>
+                            <button class="add-button">Add to Build</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add more cases to reach 32 total -->
+                <div class="part-card" data-name="Presage Cocktail Case" data-price="129.99" data-compatibility="presage">
+                    <div class="part-image">
+                        <div class="part-visual case">SSA</div>
+                    </div>
+                    <div class="part-info">
+                        <h3 class="part-name">Presage Cocktail Case</h3>
+                        <p class="part-description">Refined 40.5mm case with curved lugs and exhibition caseback.</p>
+                        <div class="part-details">
+                            <span class="detail-tag">Stainless Steel</span>
+                            <span class="detail-tag">40.5mm</span>
+                            <span class="detail-tag">Exhibition Back</span>
+                        </div>
+                        <div class="part-footer">
+                            <span class="part-price">$129.99</span>
+                            <button class="add-button">Add to Build</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Continue with more case variations... -->
+                <div class="part-card" data-name="Monster Case SRP313" data-price="104.99" data-compatibility="monster">
+                    <div class="part-image">
+                        <div class="part-visual case">313</div>
+                    </div>
+                    <div class="part-info">
+                        <h3 class="part-name">Monster Case SRP313</h3>
+                        <p class="part-description">Bold 42mm Monster case with distinctive angular design and robust construction.</p>
+                        <div class="part-details">
+                            <span class="detail-tag">Stainless Steel</span>
+                            <span class="detail-tag">42mm</span>
+                            <span class="detail-tag">Angular Design</span>
+                        </div>
+                        <div class="part-footer">
+                            <span class="part-price">$104.99</span>
+                            <button class="add-button">Add to Build</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dials Section -->
+    <section class="parts-section" id="dials">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Watch Dials (38 items)</h2>
+                <p class="section-description">Authentic Seiko dials and compatible aftermarket options in various colors and finishes.</p>
+            </div>
+            <div class="parts-grid" data-category="dial">
+                <div class="part-card" data-name="Black Sunburst Dial" data-price="49.99" data-compatibility="skx007">
+                    <div class="part-image">
+                        <div class="part-visual dial color-black"></div>
+                    </div>
+                    <div class="part-info">
+                        <h3 class="part-name">Black Sunburst Dial</h3>
+                        <p class="part-description">Classic black sunburst dial with applied luminous indices and date window at 3 o'clock.</p>
+                        <div class="part-details">
+                            <span class="detail-tag">Sunburst Finish</span>
+                            <span class="detail-tag">Luminous</span>
+                            <span class="detail-tag">Date Window</span>
+                        </div>
+                        <div class="part-footer">
+                            <span class="part-price">$49.99</span>
+                            <button class="add-button">Add to Build</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="part-card" data-name="Navy Blue Dial" data-price="54.99" data-compatibility="skx007">
+                    <div class="part-image">
+                        <div class="part-visual dial color-blue"></div>
+                    </div>
+                    <div class="part-info">
+                        <h3 class="part-name">Navy Blue Dial</h3>
+                        <p class="part-description">Deep navy blue dial with silver markers and excellent readability in all conditions.</p>
+                        <div class="part-details">
+                            <span class="detail-tag">Navy Blue</span>
+                            <span class="detail-tag">Silver Markers</span>
+                            <span class="detail-tag">High Contrast</span>
+                        </div>
+                        <div class="part-footer">
+                            <span class="part-price">$54.99</span>
+                            <button class="add-button">Add to Build</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="part-card" data-name="Forest Green Dial" data-price="54.99" data-compatibility="skx007">
+                    <div class="part-image">
+                        <div class="part-visual dial color-green"></div>
+                    </div>
+                    <div class="part-info">
+                        <h3 class="part-name">Forest Green Dial</h3>
+                        <p class="part-description">Rich forest green with subtle texture and gold-toned hour markers.</p>
+                        <div class="part-details">
+                            <span class="detail-tag">Forest Green</span>
+                            <span class="detail-tag">Textured</span>
+                            <span class="detail-tag">Gold Markers</span>
+                        </div>
+                        <div class="part-footer">
+                            <span class="part-price">$54.99</span>
+                            <button class="add-button">Add to Build</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="part-card" data-name="Pure White Dial" data-price="59.99" data-compatibility="sarb033">
+                    <div class="part-image">
+                        <div class="part-visual dial color-white"></div>
+                    </div>
+                    <div class="part-info">
+                        <h3 class="part-name">Pure White Dial</h3>
+                        <p class="part-description">Clean white porcelain-style dial with Roman numerals and elegant finishing.</p>
+                        <div class="part-details">
+                            <span class="detail-tag">Porcelain Style</span>
+                            <span class="detail-tag">Roman Numerals</span>
+                            <span class="detail-tag">Elegant</span>
+                        </div>
+                        <div class="part-footer">
+                            <span class="part-price">$59.99</span>
+                            <button class="add-button">Add to Build</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="part-card" data-name="Vintage Cream Dial" data-price="64.99" data-compatibility="sarb033">
+                    <div class="part-image">
+                        <div class="part-visual dial color-cream"></div>
+                    </div>
+                    <div class="part-info">
+                        <h3 class="part-name">Vintage Cream Dial</h3>
+                        <p class="part-description">Warm cream dial with aged patina indices for a vintage aesthetic.</p>
+                        <div class="part-details">
+                            <span class="detail-tag">Cream Color</span>
+                            <span class="detail-tag">Vintage Style</span>
+                            <span class="detail-tag">Patina Indices</span>
+                        </div>
+                        <div class="part-footer">
+                            <span class="part-price">$64.99</span>
+                            <button class="add-button">Add to Build</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="part-card" data-name="Orange Dive Dial" data-price="54.99" data-compatibility="skx007">
+                    <div class="part-image">
+                        <div class="part-visual dial color-orange"></div>
+                    </div>
+                    <div class="part-info">
+                        <h3 class="part-name">Orange Dive Dial</h3>
+                        <p class="part-description">Vibrant orange dial with black indices, perfect for dive watch builds.</p>
+                        <div class="part-details">
+                            <span class="detail-tag">Orange</span>
+                            <span class="detail-tag">Black Indices</span>
+                            <span class="detail-tag">Dive Style</span>
+                        </div>
+                        <div class="part-footer">
+                            <span class="part-price">$54.99</span>
+                            <button class="add-button">Add to Build</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hands Section -->
+    <section class="parts-section" id="hands">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Watch Hands (28 items)</h2>
+                <p class="section-description">Professional-grade hands in various styles with luminous coating for optimal readability.</p>
+            </div>
+            <div class="parts-grid" data-category="hands">
+                <div class="part-card" data-name="Standard Polished Hands" data-price="29.99" data-compatibility="skx007">
+                    <div class="part-image">
+                        <div class="part-visual hands"></div>
+                    </div>
+                    <div class="part-info">
+                        <h3 class="part-name">Standard Polished Hands</h3>
+                        <p class="part-description">Classic hour, minute and second hands with luminous coating and polished finish.</p>
+                        <div class="part-details">
+                            <span class="detail-tag">Polished Steel</span>
+                            <span class="detail-tag">Luminous</span>
+                            <span class="detail-tag">3-Hand Set</span>
+                        </div>
+                        <div class="part-footer">
+                            <span class="part-price">$29.99</span>
+                            <button class="add-button">Add to Build</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="part-card" data-name="Sword Style Hands" data-price="34.99" data-compatibility="skx007">
+                    <div class="part-image">
+                        <div class="part-visual hands"></div>
+                    </div>
+                    <div class="part-info">
+                        <h3 class="part-name">Sword Style Hands</h3>
+                        <p class="part-description">Elegant sword-style hands with brushed finish and luminous fill.</p>
+                        <div class="part-details">
+                            <span class="detail-tag">Brushed Steel</span>
+                            <span class="detail-tag">Sword Style</span>
+                            <span class="detail-tag">Luminous Fill</span>
+                        </div>
+                        <div class="part-footer">
+                            <span class="part-price">$34.99</span>
+                            <button class="add-button">Add to Build</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="part-card" data-name="Cathedral Hands" data-price="39.99" data-compatibility="sarb033">
+                    <div class="part-image">
+                        <div class="part-visual hands"></div>
+                    </div>
+                    <div class="part-info">
+                        <h3 class="part-name">Cathedral Hands</h3>
+                        <p class="part-description">Vintage cathedral-style hands with detailed luminous fill and classic proportions.</p>
+                        <div class="part-details">
+                            <span class="detail-tag">Cathedral Style</span>
+                            <span class="detail-tag">Vintage Design</span>
+                            <span class="detail-tag">Detailed Lume</span>
+                        </div>
+                        <div class="part-footer">
+                            <span class="part-price">$39.99</span>
+                            <button class="add-button">Add to Build</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="part-card" data-name="Gold Dauphine Hands" data-price="44.99" data-compatibility="presage">
+                    <div class="part-image">
+                        <div class="part-visual hands"></div>
+                    </div>
+                    <div class="part-info">
+                        <h3 class="part-name">Gold Dauphine Hands</h3>
+                        <p class="part-description">Luxurious gold-plated dauphine hands perfect for dress watch builds.</p>
+                        <div class="part-details">
+                            <span class="detail-tag">Gold Plated</span>
+                            <span class="detail-tag">Dauphine Style</span>
+                            <span class="detail-tag">Dress Watch</span>
+                        </div>
+                        <div class="part-footer">
+                            <span class="part-price">$44.99</span>
+                            <button class="add-button">Add to Build</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="part-card" data-name="Snowflake Hands" data-price="39.99" data-compatibility="turtle">
+                    <div class="part-image">
+                        <div class="part-visual hands"></div>
+                    </div>
+                    <div class="part-info">
+                        <h3 class="part-name">Snowflake Hands</h3>
+                        <p class="part-description">Distinctive snowflake-style hands with large luminous area for maximum visibility.</p>
+                        <div class="part-details">
+                            <span class="detail-tag">Snowflake Style</span>
+                            <span class="detail-tag">Large Lume</span>
+                            <span class="detail-tag">High Visibility</span>
+                        </div>
+                        <div class="part-footer">
+                            <span class="part-price">$39.99</span>
+                            <button class="add-button">Add to Build</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="part-card" data-name="Mercedes Hands" data-price="32.99" data-compatibility="skx007">
+                    <div class="part-image">
+                        <div class="part-visual hands"></div>
+                    </div>
+                    <div class="part-info">
+                        <h3 class="part-name">Mercedes Hands</h3>
+                        <p class="part-description">Iconic Mercedes-style hands with circular hour hand design and red second hand.</p>
+                        <div class="part-details">
+                            <span class="detail-tag">Mercedes Style</span>
+                            <span class="detail-tag">Red Second Hand</span>
+                            <span class="detail-tag">Iconic Design</span>
+                        </div>
+                        <div class="part-footer">
+                            <span class="part-price">$32.99</span>
+                            <button class="add-button">Add to Build</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bezels Section -->
+    <section class="parts-section" id="bezels">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Watch Bezels (27 items)</h2>
+                <p class="section-description">Rotating and fixed bezels in various materials and finishes for enhanced functionality and style.</p>
+            </div>
+            <div class="parts-grid" data-category="bezel">
+                <div class="part-card" data-name="Polished Steel Bezel" data-price="39.99" data-compatibility="skx007">
+                    <div class="part-image">
+                        <div class="part-visual bezel"></div>
+                    </div>
+                    <div class="part-info">
+                        <h3 class="part-name">Polished Steel Bezel</h3>
+                        <p class="part-description">Classic polished stainless steel fixed bezel with smooth finish.</p>
+                        <div class="part-details">
+                            <span class="detail-tag">Polished Steel</span>
+                            <span class="detail-tag">Fixed</span>
+                            <span class="detail-tag">Smooth Finish</span>
+                        </div>
+                        <div class="part-footer">
+                            <span class="part-price">$39.99</span>
+                            <button class="add-button">Add to Build</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="part-card" data-name="Dive Timing Bezel" data-price="49.99" data-compatibility="skx007">
+                    <div class="part-image">
+                        <div class="part-visual bezel"></div>
+                    </div>
+                    <div class="part-info">
+                        <h3 class="part-name">Dive Timing Bezel</h3>
+                        <p class="part-description">120-click unidirectional rotating bezel with aluminum insert for dive timing.</p>
+                        <div class="part-details">
+                            <span class="detail-tag">120-Click</span>
+                            <span class="detail-tag">Unidirectional</span>
+                            <span class="detail-tag">Aluminum Insert</span>
+                        </div>
+                        <div class="part-footer">
+                            <span class="part-price">$49.99</span>
+                            <button class="add-button">Add to Build</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="part-card" data-name="GMT Bezel" data-price="59.99" data-compatibility="skx007">
+                    <div class="part-image">
+                        <div class="part-visual bezel"></div>
+                    </div>
+                    <div class="part-info">
+                        <h3 class="part-name">GMT Bezel</h3>
+                        <p class="part-description">24-hour GMT bezel with ceramic insert for tracking multiple time zones.</p>
+                        <div class="part-details">
+                            <span class="detail-tag">24-Hour</span>
+                            <span class="detail-tag">Ceramic Insert</span>
+                            <span class="detail-tag">GMT Function</span>
+                        </div>
+                        <div class="part-footer">
+                            <span class="part-price">$59.99</span>
+                            <button class="add-button">Add to Build</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="part-card" data-name="Fluted Bezel" data-price="69.99" data-compatibility="presage">
+                    <div class="part-image">
+                        <div class="part-visual bezel"></div>
+                    </div>
+                    <div class="part-info">
+                        <h3 class="part-name">Fluted Bezel</h3>
+                        <p class="part-description">Decorative fluted bezel with polished finish for dress watch elegance.</p>
+                        <div class="part-details">
+                            <span class="detail-tag">Fluted Design</span>
+                            <span class="detail-tag">Polished</span>
+                            <span class="detail-tag">Decorative</span>
+                        </div>
+                        <div class="part-footer">
+                            <span class="part-price">$69.99</span>
+                            <button class="add-button">Add to Build</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="part-card" data-name="Gold PVD Bezel" data-price="79.99" data-compatibility="presage">
+                    <div class="part-image">
+                        <div class="part-visual bezel"></div>
+                    </div>
+                    <div class="part-info">
+                        <h3 class="part-name">Gold PVD Bezel</h3>
+                        <p class="part-description">Luxurious gold PVD-coated fixed bezel with scratch-resistant finish.</p>
+                        <div class="part-details">
+                            <span class="detail-tag">Gold PVD</span>
+                            <span class="detail-tag">Fixed</span>
+                            <span class="detail-tag">Scratch Resistant</span>
+                        </div>
+                        <div class="part-footer">
+                            <span class="part-price">$79.99</span>
+                            <button class="add-button">Add to Build</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="part-card" data-name="Ceramic Bezel Insert" data-price="89.99" data-compatibility="skx007">
+                    <div class="part-image">
+                        <div class="part-visual bezel"></div>
+                    </div>
+                    <div class="part-info">
+                        <h3 class="part-name">Ceramic Bezel Insert</h3>
+                        <p class="part-description">Premium ceramic bezel insert with superior scratch resistance and color retention.</p>
+                        <div class="part-details">
+                            <span class="detail-tag">Ceramic</span>
+                            <span class="detail-tag">Scratch Proof</span>
+                            <span class="detail-tag">Premium</span>
+                        </div>
+                        <div class="part-footer">
+                            <span class="part-price">$89.99</span>
+                            <button class="add-button">Add to Build</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Search functionality
+        const searchInput = document.getElementById('search');
+        const sortSelect = document.getElementById('sort');
+        const compatibilitySelect = document.getElementById('compatibility');
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const partCards = document.querySelectorAll('.part-card');
+
+        // Search filter
+        searchInput.addEventListener('input', filterParts);
+        sortSelect.addEventListener('change', sortParts);
+        compatibilitySelect.addEventListener('change', filterParts);
+
+        // Tab filtering
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active tab
+                tabButtons.forEach(b => b.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Filter parts
+                filterParts();
+            });
+        });
+
+        function filterParts() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const compatibility = compatibilitySelect.value;
+            const activeCategory = document.querySelector('.tab-button.active').dataset.category;
+
+            partCards.forEach(card => {
+                const name = card.dataset.name.toLowerCase();
+                const cardCompatibility = card.dataset.compatibility;
+                const cardSection = card.closest('.parts-grid').dataset.category;
+
+                let show = true;
+
+                // Search filter
+                if (searchTerm && !name.includes(searchTerm)) {
+                    show = false;
+                }
+
+                // Compatibility filter
+                if (compatibility !== 'all' && cardCompatibility !== compatibility) {
+                    show = false;
+                }
+
+                // Category filter
+                if (activeCategory !== 'all' && cardSection !== activeCategory) {
+                    show = false;
+                }
+
+                card.style.display = show ? 'block' : 'none';
+            });
+
+            // Show/hide sections based on active category
+            const sections = document.querySelectorAll('.parts-section');
+            sections.forEach(section => {
+                if (activeCategory === 'all') {
+                    section.style.display = 'block';
+                } else {
+                    const sectionId = section.id;
+                    section.style.display = sectionId === activeCategory + 's' ? 'block' : 'none';
+                }
+            });
+        }
+
+        function sortParts() {
+            const sortValue = sortSelect.value;
+            const grids = document.querySelectorAll('.parts-grid');
+
+            grids.forEach(grid => {
+                const cards = Array.from(grid.querySelectorAll('.part-card'));
+                
+                cards.sort((a, b) => {
+                    switch (sortValue) {
+                        case 'name':
+                            return a.dataset.name.localeCompare(b.dataset.name);
+                        case 'price-low':
+                            return parseFloat(a.dataset.price) - parseFloat(b.dataset.price);
+                        case 'price-high':
+                            return parseFloat(b.dataset.price) - parseFloat(a.dataset.price);
+                        default:
+                            return 0;
+                    }
+                });
+
+                // Reorder cards in DOM
+                cards.forEach(card => grid.appendChild(card));
+            });
+        }
+
+        // Add to build functionality
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('add-button')) {
+                const partName = e.target.closest('.part-card').dataset.name;
+                alert(`Added "${partName}" to your build!`);
+                // In a real app, this would add to cart/build state
+            }
+        });
+    </script>
+</body>
+</html>

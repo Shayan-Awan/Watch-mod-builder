@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jewelry Designer | Seiko Watch Customizer</title>
+    <meta name="description" content="Design custom jewelry to complement your Seiko watch. Create matching chains, bracelets, and rings with premium materials and personalized engravings.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #14213D;
+            --secondary: #E5E5E5;
+            --accent: #FCA311;
+            --background: #FFFFFF;
+            --text: #000000;
+            --highlight: #C9D8E4;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --gold: #FFD700;
+            --silver: #C0C0C0;
+            --platinum: #E5E4E2;
+            --rose-gold: #ECC5C0;
+            --gradient-1: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            --gradient-2: linear-gradient(135deg, var(--highlight) 0%, var(--secondary) 100%);
+            --gradient-gold: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            --gradient-silver: linear-gradient(135deg, #E5E5E5 0%, #C0C0C0 100%);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--background);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+        }
+
+        .logo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .breadcrumb {
+            color: var(--text);
+            opacity: 0.7;
+            font-size: 14px;
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* Main Layout */
+        .main-content {
+            display: grid;
+            grid-template-columns: 320px 1fr 320px;
+            gap: 32px;
+            padding: 32px 0;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Jewelry Categories */
+        .jewelry-categories {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+            height: fit-content;
+            position: sticky;
+            top: 120px;
+        }
+
+        .category-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .jewelry-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--highlight);
+        }
+
+        .jewelry-tab {
+            flex: 1;
+            padding: 12px 8px;
+            background: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .jewelry-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .category-section {
+            margin-bottom: 24px;
+        }
+
+        .category-label {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-size: 14px;
+            display: block;
+        }
+
+        .option-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .option-item {
+            background: var(--gradient-2);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            padding: 12px 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .option-item:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .option-item.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .option-item.premium {
+            background: var(--gradient-gold);
+            color: var(--primary);
+        }
+
+        .option-item.premium::after {
+            content: '⭐';
+            position: absolute;
+            top: 2px;
+            right: 4px;
+            font-size: 10px;
+        }
+
+        /* Material Swatches */
+        .material-swatch {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: var(--shadow-sm);
+            margin: 0 auto 4px;
+        }
+
+        .material-gold { background: var(--gradient-gold); }
+        .material-silver { background: var(--gradient-silver); }
+        .material-platinum { background: linear-gradient(135deg, #E5E4E2 0%, #B8B6B4 100%); }
+        .material-rose-gold { background: linear-gradient(135deg, #ECC5C0 0%, #D4A5A5 100%); }
+        .material-steel { background: linear-gradient(135deg, #C0C0C0 0%, #808080 100%); }
+
+        /* Gemstone Colors */
+        .gemstone-diamond { background: linear-gradient(135deg, #FFFFFF 0%, #E5E5E5 100%); }
+        .gemstone-sapphire { background: linear-gradient(135deg, #0F52BA 0%, #082A5E 100%); }
+        .gemstone-ruby { background: linear-gradient(135deg, #E0115F 0%, #9E0639 100%); }
+        .gemstone-emerald { background: linear-gradient(135deg, #50C878 0%, #2E8B57 100%); }
+        .gemstone-topaz { background: linear-gradient(135deg, #FFB347 0%, #FF8C00 100%); }
+
+        /* Customization Panel */
+        .customization-panel {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+            height: fit-content;
+            position: sticky;
+            top: 120px;
+        }
+
+        .panel-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .custom-section {
+            background: var(--gradient-2);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .size-slider {
+            width: 100%;
+            margin: 12px 0;
+        }
+
+        .slider-input {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--secondary);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .slider-input::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .size-display {
+            text-align: center;
+            font-weight: 600;
+            color: var(--primary);
+            margin-top: 8px;
+        }
+
+        .engraving-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--highlight);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .engraving-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(252, 163, 17, 0.1);
+        }
+
+        .font-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .font-option {
+            background: white;
+            border: 1px solid var(--highlight);
+            border-radius: 6px;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .font-option.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Jewelry Showcase */
+        .jewelry-showcase {
+            background: var(--gradient-2);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .showcase-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .showcase-subtitle {
+            color: var(--text);
+            opacity: 0.7;
+            margin-bottom: 32px;
+        }
+
+        .jewelry-display {
+            position: relative;
+            width: 400px;
+            height: 500px;
+            margin: 0 auto;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        /* Jewelry Items */
+        .jewelry-item {
+            position: absolute;
+            transition: all 0.5s ease;
+            opacity: 0;
+        }
+
+        .jewelry-item.active {
+            opacity: 1;
+        }
+
+        /* Chain Display */
+        .chain-display {
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 250px;
+            background: var(--gradient-silver);
+            border-radius: 100px;
+            border: 8px solid var(--accent);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Bracelet Display */
+        .bracelet-display {
+            bottom: 100px;
+            right: 50px;
+            width: 120px;
+            height: 40px;
+            background: var(--gradient-gold);
+            border-radius: 20px;
+            border: 3px solid var(--accent);
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Ring Display */
+        .ring-display {
+            bottom: 50px;
+            left: 50px;
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-gold);
+            border-radius: 50%;
+            border: 4px solid var(--accent);
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Watch Display */
+        .watch-display {
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 80px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 6px solid var(--accent);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 600;
+            color: white;
+            z-index: 5;
+        }
+
+        .watch-hands {
+            position: absolute;
+            width: 2px;
+            height: 25px;
+            background: white;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .watch-hands::after {
+            content: '';
+            position: absolute;
+            width: 1px;
+            height: 20px;
+            background: var(--accent);
+            top: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Price Display */
+        .price-summary {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 32px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .total-price {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent);
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .price-breakdown {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .price-item {
+            display: contents;
+        }
+
+        .item-name {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .item-price {
+            color: var(--text);
+            text-align: right;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .action-button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .action-button:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .action-button.secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .action-button.secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Preset Collections */
+        .preset-collections {
+            margin-top: 24px;
+        }
+
+        .collection-title {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .collection-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
+        .collection-item {
+            background: var(--gradient-2);
+            border: 1px solid var(--highlight);
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .collection-item:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .collection-price {
+            color: var(--accent);
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1400px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .jewelry-categories,
+            .customization-panel {
+                position: static;
+            }
+
+            .jewelry-display {
+                width: 300px;
+                height: 400px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .jewelry-tabs {
+                flex-direction: column;
+            }
+
+            .option-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .jewelry-display {
+                width: 250px;
+                height: 350px;
+            }
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animation Effects */
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+
+        .jewelry-item.premium {
+            animation: sparkle 3s ease-in-out infinite;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .jewelry-showcase {
+            animation: slideIn 0.6s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav container">
+            <a href="#" class="logo">SEIKO CUSTOMIZER</a>
+            <div class="breadcrumb">
+                <a href="homepage.html">Home</a> / <a href="outfit-creator.html">Styling</a> / Jewelry Designer
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-content">
+            <!-- Jewelry Categories -->
+            <aside class="jewelry-categories">
+                <h2 class="category-title">Jewelry Collection</h2>
+                
+                <div class="jewelry-tabs">
+                    <button class="jewelry-tab active" data-jewelry="chains">Chains</button>
+                    <button class="jewelry-tab" data-jewelry="bracelets">Bracelets</button>
+                    <button class="jewelry-tab" data-jewelry="rings">Rings</button>
+                </div>
+
+                <!-- Chains Options -->
+                <div class="jewelry-options" id="chains-options">
+                    <div class="category-section">
+                        <label class="category-label">Chain Style</label>
+                        <div class="option-grid">
+                            <div class="option-item" data-option="cuban-link" data-price="189">
+                                <div class="material-swatch material-gold"></div>
+                                Cuban Link
+                            </div>
+                            <div class="option-item" data-option="rope-chain" data-price="149">
+                                <div class="material-swatch material-silver"></div>
+                                Rope Chain
+                            </div>
+                            <div class="option-item" data-option="figaro-chain" data-price="129">
+                                <div class="material-swatch material-steel"></div>
+                                Figaro Chain
+                            </div>
+                            <div class="option-item premium" data-option="franco-chain" data-price="289">
+                                <div class="material-swatch material-platinum"></div>
+                                Franco Chain
+                            </div>
+                            <div class="option-item" data-option="box-chain" data-price="109">
+                                <div class="material-swatch material-silver"></div>
+                                Box Chain
+                            </div>
+                            <div class="option-item premium" data-option="byzantine-chain" data-price="349">
+                                <div class="material-swatch material-gold"></div>
+                                Byzantine
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="category-section">
+                        <label class="category-label">Material</label>
+                        <div class="option-grid">
+                            <div class="option-item" data-material="sterling-silver" data-price="0">
+                                <div class="material-swatch material-silver"></div>
+                                Sterling Silver
+                            </div>
+                            <div class="option-item" data-material="14k-gold" data-price="250">
+                                <div class="material-swatch material-gold"></div>
+                                14K Gold
+                            </div>
+                            <div class="option-item premium" data-material="18k-gold" data-price="450">
+                                <div class="material-swatch material-gold"></div>
+                                18K Gold
+                            </div>
+                            <div class="option-item premium" data-material="platinum" data-price="650">
+                                <div class="material-swatch material-platinum"></div>
+                                Platinum
+                            </div>
+                            <div class="option-item" data-material="rose-gold" data-price="280">
+                                <div class="material-swatch material-rose-gold"></div>
+                                Rose Gold
+                            </div>
+                            <div class="option-item" data-material="steel" data-price="-50">
+                                <div class="material-swatch material-steel"></div>
+                                Stainless Steel
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bracelets Options -->
+                <div class="jewelry-options" id="bracelets-options" style="display: none;">
+                    <div class="category-section">
+                        <label class="category-label">Bracelet Style</label>
+                        <div class="option-grid">
+                            <div class="option-item" data-option="tennis-bracelet" data-price="299">
+                                <div class="material-swatch gemstone-diamond"></div>
+                                Tennis Bracelet
+                            </div>
+                            <div class="option-item" data-option="chain-bracelet" data-price="159">
+                                <div class="material-swatch material-gold"></div>
+                                Chain Bracelet
+                            </div>
+                            <div class="option-item" data-option="cuff-bracelet" data-price="219">
+                                <div class="material-swatch material-silver"></div>
+                                Cuff Bracelet
+                            </div>
+                            <div class="option-item premium" data-option="diamond-bracelet" data-price="599">
+                                <div class="material-swatch gemstone-diamond"></div>
+                                Diamond Link
+                            </div>
+                            <div class="option-item" data-option="mesh-bracelet" data-price="189">
+                                <div class="material-swatch material-steel"></div>
+                                Mesh Bracelet
+                            </div>
+                            <div class="option-item" data-option="leather-bracelet" data-price="89">
+                                <div class="material-swatch" style="background: #8B4513;"></div>
+                                Leather Band
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="category-section">
+                        <label class="category-label">Gemstone Accent</label>
+                        <div class="option-grid">
+                            <div class="option-item" data-gemstone="none" data-price="0">
+                                No Gemstone
+                            </div>
+                            <div class="option-item premium" data-gemstone="diamonds" data-price="350">
+                                <div class="material-swatch gemstone-diamond"></div>
+                                Diamonds
+                            </div>
+                            <div class="option-item" data-gemstone="sapphires" data-price="180">
+                                <div class="material-swatch gemstone-sapphire"></div>
+                                Sapphires
+                            </div>
+                            <div class="option-item" data-gemstone="rubies" data-price="220">
+                                <div class="material-swatch gemstone-ruby"></div>
+                                Rubies
+                            </div>
+                            <div class="option-item" data-gemstone="emeralds" data-price="200">
+                                <div class="material-swatch gemstone-emerald"></div>
+                                Emeralds
+                            </div>
+                            <div class="option-item" data-gemstone="topaz" data-price="120">
+                                <div class="material-swatch gemstone-topaz"></div>
+                                Blue Topaz
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rings Options -->
+                <div class="jewelry-options" id="rings-options" style="display: none;">
+                    <div class="category-section">
+                        <label class="category-label">Ring Style</label>
+                        <div class="option-grid">
+                            <div class="option-item" data-option="signet-ring" data-price="199">
+                                <div class="material-swatch material-gold"></div>
+                                Signet Ring
+                            </div>
+                            <div class="option-item" data-option="band-ring" data-price="129">
+                                <div class="material-swatch material-silver"></div>
+                                Classic Band
+                            </div>
+                            <div class="option-item premium" data-option="gemstone-ring" data-price="449">
+                                <div class="material-swatch gemstone-sapphire"></div>
+                                Gemstone Ring
+                            </div>
+                            <div class="option-item" data-option="pinky-ring" data-price="159">
+                                <div class="material-swatch material-gold"></div>
+                                Pinky Ring
+                            </div>
+                            <div class="option-item premium" data-option="diamond-ring" data-price="599">
+                                <div class="material-swatch gemstone-diamond"></div>
+                                Diamond Ring
+                            </div>
+                            <div class="option-item" data-option="statement-ring" data-price="279">
+                                <div class="material-swatch material-rose-gold"></div>
+                                Statement Ring
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="category-section">
+                        <label class="category-label">Center Stone</label>
+                        <div class="option-grid">
+                            <div class="option-item" data-stone="none" data-price="0">
+                                No Stone
+                            </div>
+                            <div class="option-item premium" data-stone="diamond" data-price="800">
+                                <div class="material-swatch gemstone-diamond"></div>
+                                Diamond
+                            </div>
+                            <div class="option-item" data-stone="sapphire" data-price="300">
+                                <div class="material-swatch gemstone-sapphire"></div>
+                                Sapphire
+                            </div>
+                            <div class="option-item" data-stone="ruby" data-price="350">
+                                <div class="material-swatch gemstone-ruby"></div>
+                                Ruby
+                            </div>
+                            <div class="option-item" data-stone="emerald" data-price="320">
+                                <div class="material-swatch gemstone-emerald"></div>
+                                Emerald
+                            </div>
+                            <div class="option-item" data-stone="onyx" data-price="150">
+                                <div class="material-swatch" style="background: #000000;"></div>
+                                Black Onyx
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="preset-collections">
+                    <div class="collection-title">Complete Sets</div>
+                    <div class="collection-grid">
+                        <div class="collection-item" onclick="loadPresetCollection('business')">
+                            Business Professional
+                            <div class="collection-price">$899</div>
+                        </div>
+                        <div class="collection-item" onclick="loadPresetCollection('luxury')">
+                            Luxury Collection
+                            <div class="collection-price">$1,599</div>
+                        </div>
+                        <div class="collection-item" onclick="loadPresetCollection('casual')">
+                            Casual Elegance
+                            <div class="collection-price">$449</div>
+                        </div>
+                        <div class="collection-item" onclick="loadPresetCollection('statement')">
+                            Statement Pieces
+                            <div class="collection-price">$1,199</div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Jewelry Showcase -->
+            <main class="jewelry-showcase">
+                <h1 class="showcase-title">Custom Jewelry Designer</h1>
+                <p class="showcase-subtitle">Create the perfect jewelry collection to complement your Seiko watch</p>
+                
+                <div class="jewelry-display" id="jewelryDisplay">
+                    <!-- Chain -->
+                    <div class="jewelry-item chain-display active" id="chainDisplay">
+                        CHAIN
+                    </div>
+                    
+                    <!-- Bracelet -->
+                    <div class="jewelry-item bracelet-display" id="braceletDisplay">
+                        BRACELET
+                    </div>
+                    
+                    <!-- Ring -->
+                    <div class="jewelry-item ring-display" id="ringDisplay">
+                        RING
+                    </div>
+                    
+                    <!-- Watch -->
+                    <div class="jewelry-item watch-display active" id="watchDisplay">
+                        <div class="watch-hands"></div>
+                        SEIKO
+                    </div>
+                </div>
+
+                <div class="price-summary">
+                    <div class="total-price" id="totalPrice">$0.00</div>
+                    <div class="price-breakdown" id="priceBreakdown">
+                        <!-- Price items will be populated here -->
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-button" onclick="addToCart()">Add to Cart</button>
+                        <button class="action-button secondary" onclick="saveDesign()">Save Design</button>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Customization Panel -->
+            <aside class="customization-panel">
+                <h2 class="panel-title">Customization</h2>
+                
+                <div class="custom-section">
+                    <div class="section-title">Size & Fit</div>
+                    <div class="size-control" id="sizeControl">
+                        <input type="range" class="slider-input" id="sizeSlider" min="14" max="26" value="18" step="0.5">
+                        <div class="size-display" id="sizeDisplay">18 inches</div>
+                    </div>
+                </div>
+
+                <div class="custom-section">
+                    <div class="section-title">Personal Engraving</div>
+                    <input type="text" class="engraving-input" id="engravingText" placeholder="Enter your text (max 20 characters)" maxlength="20">
+                    <div class="font-options">
+                        <div class="font-option selected" data-font="script">Script</div>
+                        <div class="font-option" data-font="block">Block</div>
+                        <div class="font-option" data-font="cursive">Cursive</div>
+                        <div class="font-option" data-font="modern">Modern</div>
+                    </div>
+                </div>
+
+                <div class="custom-section">
+                    <div class="section-title">Watch Selection</div>
+                    <div class="option-grid">
+                        <div class="option-item selected" data-watch="skx007" data-watch-price="329">
+                            SKX007
+                        </div>
+                        <div class="option-item" data-watch="sarb033" data-watch-price="429">
+                            SARB033
+                        </div>
+                        <div class="option-item" data-watch="turtle" data-watch-price="389">
+                            Turtle
+                        </div>
+                        <div class="option-item" data-watch="presage" data-watch-price="549">
+                            Presage
+                        </div>
+                    </div>
+                </div>
+
+                <div class="custom-section">
+                    <div class="section-title">Packaging</div>
+                    <div class="option-grid">
+                        <div class="option-item selected" data-packaging="standard" data-packaging-price="0">
+                            Standard Box
+                        </div>
+                        <div class="option-item premium" data-packaging="luxury" data-packaging-price="89">
+                            Luxury Box
+                        </div>
+                        <div class="option-item" data-packaging="gift" data-packaging-price="45">
+                            Gift Wrap
+                        </div>
+                        <div class="option-item premium" data-packaging="wooden" data-packaging-price="129">
+                            Wooden Case
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons" style="margin-top: 20px;">
+                    <button class="action-button secondary" onclick="resetDesign()">Reset</button>
+                    <button class="action-button" onclick="shareDesign()">Share</button>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // Current jewelry configuration
+        let currentConfig = {
+            activeJewelry: 'chains',
+            chains: {
+                style: 'cuban-link',
+                material: 'sterling-silver',
+                size: 18,
+                engraving: '',
+                font: 'script'
+            },
+            bracelets: {
+                style: 'tennis-bracelet',
+                material: 'sterling-silver',
+                gemstone: 'none',
+                size: 7,
+                engraving: '',
+                font: 'script'
+            },
+            rings: {
+                style: 'signet-ring',
+                material: 'sterling-silver',
+                stone: 'none',
+                size: 8,
+                engraving: '',
+                font: 'script'
+            },
+            watch: 'skx007',
+            packaging: 'standard'
+        };
+
+        // Pricing data
+        const basePrices = {
+            'cuban-link': 189,
+            'rope-chain': 149,
+            'figaro-chain': 129,
+            'franco-chain': 289,
+            'box-chain': 109,
+            'byzantine-chain': 349,
+            'tennis-bracelet': 299,
+            'chain-bracelet': 159,
+            'cuff-bracelet': 219,
+            'diamond-bracelet': 599,
+            'mesh-bracelet': 189,
+            'leather-bracelet': 89,
+            'signet-ring': 199,
+            'band-ring': 129,
+            'gemstone-ring': 449,
+            'pinky-ring': 159,
+            'diamond-ring': 599,
+            'statement-ring': 279
+        };
+
+        const materialPrices = {
+            'sterling-silver': 0,
+            '14k-gold': 250,
+            '18k-gold': 450,
+            'platinum': 650,
+            'rose-gold': 280,
+            'steel': -50
+        };
+
+        const gemstonePrices = {
+            'none': 0,
+            'diamonds': 350,
+            'sapphires': 180,
+            'rubies': 220,
+            'emeralds': 200,
+            'topaz': 120,
+            'diamond': 800,
+            'sapphire': 300,
+            'ruby': 350,
+            'emerald': 320,
+            'onyx': 150
+        };
+
+        const watchPrices = {
+            'skx007': 329,
+            'sarb033': 429,
+            'turtle': 389,
+            'presage': 549
+        };
+
+        const packagingPrices = {
+            'standard': 0,
+            'luxury': 89,
+            'gift': 45,
+            'wooden': 129
+        };
+
+        // Preset collections
+        const presetCollections = {
+            'business': {
+                chains: { style: 'rope-chain', material: 'sterling-silver' },
+                bracelets: { style: 'chain-bracelet', material: 'sterling-silver', gemstone: 'none' },
+                rings: { style: 'signet-ring', material: 'sterling-silver', stone: 'onyx' },
+                watch: 'sarb033'
+            },
+            'luxury': {
+                chains: { style: 'byzantine-chain', material: '18k-gold' },
+                bracelets: { style: 'diamond-bracelet', material: '18k-gold', gemstone: 'diamonds' },
+                rings: { style: 'diamond-ring', material: '18k-gold', stone: 'diamond' },
+                watch: 'presage'
+            },
+            'casual': {
+                chains: { style: 'box-chain', material: 'steel' },
+                bracelets: { style: 'leather-bracelet', material: 'steel', gemstone: 'none' },
+                rings: { style: 'band-ring', material: 'steel', stone: 'none' },
+                watch: 'skx007'
+            },
+            'statement': {
+                chains: { style: 'franco-chain', material: '14k-gold' },
+                bracelets: { style: 'cuff-bracelet', material: '14k-gold', gemstone: 'sapphires' },
+                rings: { style: 'statement-ring', material: 'rose-gold', stone: 'ruby' },
+                watch: 'turtle'
+            }
+        };
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            updateDisplay();
+            updatePricing();
+        });
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Jewelry tab switching
+            document.querySelectorAll('.jewelry-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    switchJewelryType(this.dataset.jewelry);
+                });
+            });
+
+            // Option selection
+            document.querySelectorAll('.option-item').forEach(option => {
+                option.addEventListener('click', function() {
+                    selectOption(this);
+                });
+            });
+
+            // Size slider
+            document.getElementById('sizeSlider').addEventListener('input', function() {
+                updateSize(this.value);
+            });
+
+            // Engraving input
+            document.getElementById('engravingText').addEventListener('input', function() {
+                updateEngraving(this.value);
+            });
+
+            // Font selection
+            document.querySelectorAll('.font-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    selectFont(this.dataset.font);
+                });
+            });
+        }
+
+        // Switch jewelry type
+        function switchJewelryType(type) {
+            currentConfig.activeJewelry = type;
+
+            // Update tab visual
+            document.querySelectorAll('.jewelry-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`[data-jewelry="${type}"]`).classList.add('active');
+
+            // Show relevant options
+            document.querySelectorAll('.jewelry-options').forEach(options => {
+                options.style.display = 'none';
+            });
+            document.getElementById(`${type}-options`).style.display = 'block';
+
+            // Update display
+            updateDisplay();
+            updateSizeControl();
+        }
+
+        // Select option
+        function selectOption(element) {
+            const parent = element.closest('.option-grid');
+            
+            // Update visual selection
+            parent.querySelectorAll('.option-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            element.classList.add('selected');
+
+            // Update configuration
+            const jewelryType = currentConfig.activeJewelry;
+            
+            if (element.dataset.option) {
+                currentConfig[jewelryType].style = element.dataset.option;
+            }
+            if (element.dataset.material) {
+                currentConfig[jewelryType].material = element.dataset.material;
+            }
+            if (element.dataset.gemstone) {
+                currentConfig[jewelryType].gemstone = element.dataset.gemstone;
+            }
+            if (element.dataset.stone) {
+                currentConfig[jewelryType].stone = element.dataset.stone;
+            }
+            if (element.dataset.watch) {
+                currentConfig.watch = element.dataset.watch;
+            }
+            if (element.dataset.packaging) {
+                currentConfig.packaging = element.dataset.packaging;
+            }
+
+            updateDisplay();
+            updatePricing();
+        }
+
+        // Update size
+        function updateSize(value) {
+            const jewelryType = currentConfig.activeJewelry;
+            currentConfig[jewelryType].size = parseFloat(value);
+            
+            const unit = jewelryType === 'rings' ? '' : ' inches';
+            document.getElementById('sizeDisplay').textContent = value + unit;
+            
+            updateDisplay();
+        }
+
+        // Update size control based on jewelry type
+        function updateSizeControl() {
+            const slider = document.getElementById('sizeSlider');
+            const display = document.getElementById('sizeDisplay');
+            const jewelryType = currentConfig.activeJewelry;
+            
+            if (jewelryType === 'rings') {
+                slider.min = 4;
+                slider.max = 13;
+                slider.value = currentConfig[jewelryType].size;
+                slider.step = 0.25;
+                display.textContent = currentConfig[jewelryType].size;
+            } else if (jewelryType === 'bracelets') {
+                slider.min = 6;
+                slider.max = 10;
+                slider.value = currentConfig[jewelryType].size;
+                slider.step = 0.25;
+                display.textContent = currentConfig[jewelryType].size + ' inches';
+            } else {
+                slider.min = 14;
+                slider.max = 26;
+                slider.value = currentConfig[jewelryType].size;
+                slider.step = 0.5;
+                display.textContent = currentConfig[jewelryType].size + ' inches';
+            }
+        }
+
+        // Update engraving
+        function updateEngraving(text) {
+            const jewelryType = currentConfig.activeJewelry;
+            currentConfig[jewelryType].engraving = text;
+        }
+
+        // Select font
+        function selectFont(font) {
+            const jewelryType = currentConfig.activeJewelry;
+            currentConfig[jewelryType].font = font;
+
+            // Update visual selection
+            document.querySelectorAll('.font-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.querySelector(`[data-font="${font}"]`).classList.add('selected');
+        }
+
+        // Update display
+        function updateDisplay() {
+            // Show/hide jewelry items
+            document.querySelectorAll('.jewelry-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Always show watch
+            document.getElementById('watchDisplay').classList.add('active');
+
+            // Show current jewelry type
+            const jewelryType = currentConfig.activeJewelry;
+            if (jewelryType === 'chains') {
+                document.getElementById('chainDisplay').classList.add('active');
+                updateChainDisplay();
+            } else if (jewelryType === 'bracelets') {
+                document.getElementById('braceletDisplay').classList.add('active');
+                updateBraceletDisplay();
+            } else if (jewelryType === 'rings') {
+                document.getElementById('ringDisplay').classList.add('active');
+                updateRingDisplay();
+            }
+
+            updateWatchDisplay();
+        }
+
+        // Update individual displays
+        function updateChainDisplay() {
+            const chain = document.getElementById('chainDisplay');
+            const config = currentConfig.chains;
+            
+            // Update material color
+            const materialColors = {
+                'sterling-silver': 'var(--gradient-silver)',
+                '14k-gold': 'var(--gradient-gold)',
+                '18k-gold': 'var(--gradient-gold)',
+                'platinum': 'linear-gradient(135deg, #E5E4E2 0%, #B8B6B4 100%)',
+                'rose-gold': 'linear-gradient(135deg, #ECC5C0 0%, #D4A5A5 100%)',
+                'steel': 'var(--gradient-silver)'
+            };
+            
+            chain.style.background = materialColors[config.material] || 'var(--gradient-silver)';
+            chain.textContent = config.style.toUpperCase().replace('-', ' ');
+        }
+
+        function updateBraceletDisplay() {
+            const bracelet = document.getElementById('braceletDisplay');
+            const config = currentConfig.bracelets;
+            
+            const materialColors = {
+                'sterling-silver': 'var(--gradient-silver)',
+                '14k-gold': 'var(--gradient-gold)',
+                '18k-gold': 'var(--gradient-gold)',
+                'platinum': 'linear-gradient(135deg, #E5E4E2 0%, #B8B6B4 100%)',
+                'rose-gold': 'linear-gradient(135deg, #ECC5C0 0%, #D4A5A5 100%)',
+                'steel': 'var(--gradient-silver)'
+            };
+            
+            bracelet.style.background = materialColors[config.material] || 'var(--gradient-silver)';
+            bracelet.textContent = config.style.toUpperCase().replace('-', ' ');
+        }
+
+        function updateRingDisplay() {
+            const ring = document.getElementById('ringDisplay');
+            const config = currentConfig.rings;
+            
+            const materialColors = {
+                'sterling-silver': 'var(--gradient-silver)',
+                '14k-gold': 'var(--gradient-gold)',
+                '18k-gold': 'var(--gradient-gold)',
+                'platinum': 'linear-gradient(135deg, #E5E4E2 0%, #B8B6B4 100%)',
+                'rose-gold': 'linear-gradient(135deg, #ECC5C0 0%, #D4A5A5 100%)',
+                'steel': 'var(--gradient-silver)'
+            };
+            
+            ring.style.background = materialColors[config.material] || 'var(--gradient-silver)';
+            ring.textContent = config.style.toUpperCase().replace('-', ' ');
+        }
+
+        function updateWatchDisplay() {
+            const watch = document.getElementById('watchDisplay');
+            const watchColors = {
+                'skx007': '#14213D',
+                'sarb033': '#C0C0C0',
+                'turtle': '#000000',
+                'presage': '#DDCCA3'
+            };
+            
+            watch.style.background = watchColors[currentConfig.watch];
+        }
+
+        // Update pricing
+        function updatePricing() {
+            let total = 0;
+            const breakdown = [];
+
+            // Calculate jewelry price
+            const jewelryType = currentConfig.activeJewelry;
+            const config = currentConfig[jewelryType];
+            
+            let jewelryPrice = basePrices[config.style] || 0;
+            jewelryPrice += materialPrices[config.material] || 0;
+            
+            if (config.gemstone) {
+                jewelryPrice += gemstonePrices[config.gemstone] || 0;
+            }
+            if (config.stone) {
+                jewelryPrice += gemstonePrices[config.stone] || 0;
+            }
+
+            // Add engraving fee
+            if (config.engraving && config.engraving.length > 0) {
+                jewelryPrice += 25;
+                breakdown.push({ name: 'Engraving', price: 25 });
+            }
+
+            breakdown.push({ 
+                name: jewelryType.charAt(0).toUpperCase() + jewelryType.slice(0, -1),
+                price: jewelryPrice 
+            });
+            total += jewelryPrice;
+
+            // Add watch price
+            const watchPrice = watchPrices[currentConfig.watch];
+            breakdown.push({ name: 'Seiko Watch', price: watchPrice });
+            total += watchPrice;
+
+            // Add packaging price
+            const packagingPrice = packagingPrices[currentConfig.packaging];
+            if (packagingPrice > 0) {
+                breakdown.push({ name: 'Premium Packaging', price: packagingPrice });
+                total += packagingPrice;
+            }
+
+            // Update display
+            document.getElementById('totalPrice').textContent = `$${total.toFixed(2)}`;
+            
+            const breakdownEl = document.getElementById('priceBreakdown');
+            breakdownEl.innerHTML = '';
+            
+            breakdown.forEach(item => {
+                breakdownEl.innerHTML += `
+                    <div class="price-item">
+                        <span class="item-name">${item.name}</span>
+                        <span class="item-price">$${item.price.toFixed(2)}</span>
+                    </div>
+                `;
+            });
+        }
+
+        // Load preset collection
+        function loadPresetCollection(collectionName) {
+            const preset = presetCollections[collectionName];
+            if (!preset) return;
+
+            // Update configuration
+            Object.keys(preset).forEach(key => {
+                if (key === 'watch') {
+                    currentConfig.watch = preset.watch;
+                } else {
+                    Object.assign(currentConfig[key], preset[key]);
+                }
+            });
+
+            // Update visual selections
+            updateSelectionsFromConfig();
+            updateDisplay();
+            updatePricing();
+        }
+
+        // Update visual selections from configuration
+        function updateSelectionsFromConfig() {
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+
+            // Update based on current configuration
+            const jewelryType = currentConfig.activeJewelry;
+            const config = currentConfig[jewelryType];
+
+            if (config.style) {
+                const styleEl = document.querySelector(`[data-option="${config.style}"]`);
+                if (styleEl) styleEl.classList.add('selected');
+            }
+
+            if (config.material) {
+                const materialEl = document.querySelector(`[data-material="${config.material}"]`);
+                if (materialEl) materialEl.classList.add('selected');
+            }
+
+            // Update watch selection
+            const watchEl = document.querySelector(`[data-watch="${currentConfig.watch}"]`);
+            if (watchEl) watchEl.classList.add('selected');
+
+            // Update packaging selection
+            const packagingEl = document.querySelector(`[data-packaging="${currentConfig.packaging}"]`);
+            if (packagingEl) packagingEl.classList.add('selected');
+        }
+
+        // Action functions
+        function addToCart() {
+            alert('Added to cart! Your custom jewelry collection is ready for checkout.');
+        }
+
+        function saveDesign() {
+            const designData = JSON.stringify(currentConfig);
+            localStorage.setItem('customJewelryDesign', designData);
+            alert('Design saved successfully! You can load it later.');
+        }
+
+        function resetDesign() {
+            // Reset to default configuration
+            currentConfig = {
+                activeJewelry: 'chains',
+                chains: {
+                    style: 'cuban-link',
+                    material: 'sterling-silver',
+                    size: 18,
+                    engraving: '',
+                    font: 'script'
+                },
+                bracelets: {
+                    style: 'tennis-bracelet',
+                    material: 'sterling-silver',
+                    gemstone: 'none',
+                    size: 7,
+                    engraving: '',
+                    font: 'script'
+                },
+                rings: {
+                    style: 'signet-ring',
+                    material: 'sterling-silver',
+                    stone: 'none',
+                    size: 8,
+                    engraving: '',
+                    font: 'script'
+                },
+                watch: 'skx007',
+                packaging: 'standard'
+            };
+
+            document.getElementById('engravingText').value = '';
+            updateSelectionsFromConfig();
+            updateDisplay();
+            updatePricing();
+        }
+
+        function shareDesign() {
+            const shareText = `Check out my custom jewelry design with my Seiko ${currentConfig.watch.toUpperCase()}! Created with the Seiko Watch Customizer.`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'My Custom Jewelry Design',
+                    text: shareText,
+                    url: window.location.href
+                });
+            } else {
+                navigator.clipboard.writeText(shareText);
+                alert('Design details copied to clipboard!');
+            }
+        }
+    </script>
+</body>
+</html>
