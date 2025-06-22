@@ -23,6 +23,8 @@ const cases: WatchComponent[] = [
     material: "Stainless Steel",
     compatibility: ["dial_black", "dial_blue", "dial_green", "dial_orange"]
   },
+
+
   {
     id: "case_sarb033",
     name: "SARB033 Case",
@@ -41,6 +43,8 @@ const cases: WatchComponent[] = [
     material: "Stainless Steel",
     compatibility: ["dial_black", "dial_blue", "dial_green"]
   },
+
+
   {
     id: "case_presage",
     name: "Presage Case",
@@ -86,6 +90,8 @@ const dials: WatchComponent[] = [
     imagePath: "/models/watch/dials/white.svg",
     color: "#FFFFFF"
   },
+
+  //had some issues with the pricing orignially but got it figured out
   {
     id: "dial_cream",
     name: "Cream Vintage Dial",
@@ -105,6 +111,8 @@ const dials: WatchComponent[] = [
 ];
 
 // Watch Hands
+
+
 const hands: WatchComponent[] = [
   {
     id: "hands_standard",

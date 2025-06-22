@@ -41,6 +41,8 @@ const watchBuilds: WatchBuild[] = [
     }
   },
   {
+
+    //I added a few placeholders for some random wathces, includes price and parts, as well as a name for the build
     id: "2",
     title: "Rose Gold Elegance",
     author: "LuxuryTimepiece",
@@ -163,6 +165,8 @@ export default function WatchShowcase() {
                   <span>By {build.author}</span>
                   <span>{build.datePosted}</span>
                 </div>
+
+                
                 
                 <div className="flex justify-between items-center mb-4">
                   <div className="text-2xl font-bold text-orange-400">${build.totalCost}</div>
@@ -258,7 +262,7 @@ export default function WatchShowcase() {
                       <span className="text-3xl font-bold text-orange-400">${selectedWatch.totalCost}</span>
                     </div>
                   </div>
-                  
+
                   {/* Action Buttons */}
                   <div className="mt-6 space-y-3">
                     <button className="w-full bg-gradient-to-r from-blue-900 to-orange-400 text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-shadow">
