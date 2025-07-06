@@ -6,6 +6,7 @@ import fs from "fs";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Serve HTML files from the root directory
+  //directoriies
   const htmlFiles = [
     'homepage.html',
     'parts-catalog.html', 

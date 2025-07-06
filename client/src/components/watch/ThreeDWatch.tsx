@@ -67,7 +67,7 @@ function WatchModel() {
                                                                                                                           const lug2 = new THREE.Mesh(lugGeometry, caseMaterial);
                                                                                                                               const lug3 = new THREE.Mesh(lugGeometry, caseMaterial);
                                                                                                                                   const lug4 = new THREE.Mesh(lugGeometry, caseMaterial);
-                                                                                                                                      
+                                                                                                                                  
                                                                                                                                       lug1.position.set(0, 0.4, 2.4);
                                                                                                                                           lug2.position.set(0, 0.4, -2.4);
                                                                                                                                               lug3.position.set(0, -0.4, 2.4);

@@ -1,47 +1,55 @@
-import { useRef, useState, useMemo } from 'react';
-import { useFrame } from '@react-three/fiber';
-import * as THREE from 'three';
-import { useMaterialAging, useLightingSimulation, MATERIAL_DATABASE } from '@/lib/simulation/MaterialSimulation';
-import { useWatchStore } from '@/lib/stores/useWatchStore';
-import { watchComponents } from '@/data/watchComponents';
-import AdvancedMovement from './AdvancedMovement';
+import { useRef, useState, useMemo } from "react";
+import { useFrame } from "@react-three/fiber";
+import * as THREE from "three";
+import {
+  useMaterialAging,
+  useLightingSimulation,
+  MATERIAL_DATABASE,
+} from "@/lib/simulation/MaterialSimulation";
+import { useWatchStore } from "@/lib/stores/useWatchStore";
+import { watchComponents } from "@/data/watchComponents";
+import AdvancedMovement from "./AdvancedMovement";
 
 interface EnhancedWatchRendererProps {
   enableAging?: boolean;
   enableRealtimeLighting?: boolean;
-  qualityLevel?: 'medium' | 'high' | 'ultra';
+  qualityLevel?: "medium" | "high" | "ultra";
 }
 
-export default function EnhancedWatchRenderer({ 
-  enableAging = true, 
+export default function EnhancedWatchRenderer({
+  enableAging = true,
   enableRealtimeLighting = true,
-  qualityLevel = 'high'
+  qualityLevel = "high",
 }: EnhancedWatchRendererProps) {
   const { config } = useWatchStore();
   const groupRef = useRef<THREE.Group>(null);
   const caseRef = useRef<THREE.Group>(null);
   const dialRef = useRef<THREE.Group>(null);
   const bezelRef = useRef<THREE.Group>(null);
-  
+
   const [environment, setEnvironment] = useState({
     uv: 0.3,
     humidity: 0.5,
     temperature: 25,
-    saltwater: 0
+    saltwater: 0,
   });
 
   // Material aging simulations
-  const { materialState: caseAging, setEnvironment: setCaseEnv } = useMaterialAging('stainlessSteel');
-  const { materialState: dialAging } = useMaterialAging('ceramic');
-  const { materialState: bezelAging } = useMaterialAging('stainlessSteel');
-  
+  const { materialState: caseAging, setEnvironment: setCaseEnv } =
+    useMaterialAging("stainlessSteel");
+  const { materialState: dialAging } = useMaterialAging("ceramic");
+  const { materialState: bezelAging } = useMaterialAging("stainlessSteel");
+
   // Lighting simulation
-  const { lighting, setTimeOfDay, setCloudCover, setIndoor } = useLightingSimulation();
+  const { lighting, setTimeOfDay, setCloudCover, setIndoor } =
+    useLightingSimulation();
 
   // Get selected components
-  const selectedCase = watchComponents.case.find(c => c.id === config.case);
-  const selectedDial = watchComponents.dial.find(d => d.id === config.dial);
-  const selectedBezel = watchComponents.bezel.find(b => b.id === config.bezel);
+  const selectedCase = watchComponents.case.find((c) => c.id === config.case);
+  const selectedDial = watchComponents.dial.find((d) => d.id === config.dial);
+  const selectedBezel = watchComponents.bezel.find(
+    (b) => b.id === config.bezel
+  );
 
   // Dynamic material creation based on aging
   const caseMaterial = useMemo(() => {
@@ -66,7 +74,7 @@ export default function EnhancedWatchRenderer({
       color: selectedDial?.color || "#ffffff",
       metalness: 0.1,
       roughness: 0.3 + dialAging.roughnessChange,
-      transmission: selectedDial?.name.includes('Transparent') ? 0.9 : 0,
+      transmission: selectedDial?.name.includes("Transparent") ? 0.9 : 0,
       thickness: 0.5,
       ior: 1.5,
     });
@@ -100,15 +108,17 @@ export default function EnhancedWatchRenderer({
       // Update lighting environment
       const time = new Date().getHours() + new Date().getMinutes() / 60;
       setTimeOfDay(time);
-      
+
       // Simulate cloud movement
       setCloudCover(0.3 + Math.sin(state.clock.elapsedTime * 0.1) * 0.2);
     }
 
     // Rotate watch slightly for dynamic reflections
     if (groupRef.current) {
-      groupRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
-      groupRef.current.rotation.x = Math.cos(state.clock.elapsedTime * 0.3) * 0.05;
+      groupRef.current.rotation.y =
+        Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
+      groupRef.current.rotation.x =
+        Math.cos(state.clock.elapsedTime * 0.3) * 0.05;
     }
   });
 
@@ -119,9 +129,9 @@ export default function EnhancedWatchRenderer({
         position={[10, 10, 5]}
         intensity={lighting.intensity * 2}
         color={lighting.color}
-        castShadow={qualityLevel !== 'medium'}
-        shadow-mapSize-width={qualityLevel === 'ultra' ? 4096 : 2048}
-        shadow-mapSize-height={qualityLevel === 'ultra' ? 4096 : 2048}
+        castShadow={qualityLevel !== "medium"}
+        shadow-mapSize-width={qualityLevel === "ultra" ? 4096 : 2048}
+        shadow-mapSize-height={qualityLevel === "ultra" ? 4096 : 2048}
         shadow-camera-near={0.5}
         shadow-camera-far={50}
         shadow-camera-left={-10}
@@ -129,24 +139,24 @@ export default function EnhancedWatchRenderer({
         shadow-camera-top={10}
         shadow-camera-bottom={-10}
       />
-      
+
       {/* Ambient lighting with color temperature */}
-      <ambientLight 
-        intensity={lighting.intensity * 0.3} 
-        color={lighting.color} 
+      <ambientLight
+        intensity={lighting.intensity * 0.3}
+        color={lighting.color}
       />
 
       {/* Point lights for studio-style illumination */}
-      <pointLight 
-        position={[-5, 5, 5]} 
-        intensity={lighting.intensity * 0.8} 
+      <pointLight
+        position={[-5, 5, 5]}
+        intensity={lighting.intensity * 0.8}
         color={lighting.color}
         distance={20}
         decay={2}
       />
-      <pointLight 
-        position={[5, -5, 5]} 
-        intensity={lighting.intensity * 0.6} 
+      <pointLight
+        position={[5, -5, 5]}
+        intensity={lighting.intensity * 0.6}
         color={lighting.color}
         distance={15}
         decay={2}
@@ -154,29 +164,19 @@ export default function EnhancedWatchRenderer({
 
       {/* Watch Case */}
       <group ref={caseRef}>
-        <mesh 
-          castShadow 
-          receiveShadow
-          position={[0, 0, 0]}
-        >
+        <mesh castShadow receiveShadow position={[0, 0, 0]}>
           <cylinderGeometry args={[1.8, 1.8, 0.6, 32, 1]} />
           <primitive object={caseMaterial} />
         </mesh>
-        
+
         {/* Case side detail */}
-        <mesh 
-          castShadow 
-          position={[0, 0, 0]}
-        >
+        <mesh castShadow position={[0, 0, 0]}>
           <cylinderGeometry args={[1.85, 1.75, 0.65, 32, 1]} />
           <primitive object={caseMaterial} />
         </mesh>
 
         {/* Crown */}
-        <mesh 
-          castShadow 
-          position={[1.9, 0, 0]}
-        >
+        <mesh castShadow position={[1.9, 0, 0]}>
           <cylinderGeometry args={[0.08, 0.08, 0.3, 8]} />
           <primitive object={caseMaterial} />
         </mesh>
@@ -184,10 +184,7 @@ export default function EnhancedWatchRenderer({
         {/* Lugs */}
         {[0, Math.PI].map((angle, i) => (
           <group key={i} rotation={[0, 0, angle]}>
-            <mesh 
-              castShadow 
-              position={[0, 2.2, 0]}
-            >
+            <mesh castShadow position={[0, 2.2, 0]}>
               <boxGeometry args={[0.3, 0.6, 0.4]} />
               <primitive object={caseMaterial} />
             </mesh>
@@ -197,10 +194,7 @@ export default function EnhancedWatchRenderer({
 
       {/* Watch Dial */}
       <group ref={dialRef}>
-        <mesh 
-          receiveShadow 
-          position={[0, 0, 0.31]}
-        >
+        <mesh receiveShadow position={[0, 0, 0.31]}>
           <cylinderGeometry args={[1.6, 1.6, 0.02, 64]} />
           <primitive object={dialMaterial} />
         </mesh>
@@ -212,20 +206,16 @@ export default function EnhancedWatchRenderer({
           return (
             <mesh
               key={i}
-              position={[
-                Math.cos(angle) * 1.4,
-                Math.sin(angle) * 1.4,
-                0.32
-              ]}
+              position={[Math.cos(angle) * 1.4, Math.sin(angle) * 1.4, 0.32]}
               rotation={[0, 0, -angle]}
               castShadow
             >
-              <boxGeometry 
-                args={isMainHour ? [0.12, 0.04, 0.02] : [0.08, 0.02, 0.015]} 
+              <boxGeometry
+                args={isMainHour ? [0.12, 0.04, 0.02] : [0.08, 0.02, 0.015]}
               />
-              <meshPhysicalMaterial 
-                color="#333333" 
-                metalness={0.8} 
+              <meshPhysicalMaterial
+                color="#333333"
+                metalness={0.8}
                 roughness={0.2}
               />
             </mesh>
@@ -233,13 +223,11 @@ export default function EnhancedWatchRenderer({
         })}
 
         {/* Brand logo area */}
-        <mesh 
-          position={[0, 0.6, 0.32]}
-        >
+        <mesh position={[0, 0.6, 0.32]}>
           <planeGeometry args={[0.8, 0.2]} />
-          <meshPhysicalMaterial 
-            color="#222222" 
-            metalness={0.1} 
+          <meshPhysicalMaterial
+            color="#222222"
+            metalness={0.1}
             roughness={0.8}
             transparent
             opacity={0.8}
@@ -249,11 +237,7 @@ export default function EnhancedWatchRenderer({
 
       {/* Watch Bezel */}
       <group ref={bezelRef}>
-        <mesh 
-          castShadow 
-          receiveShadow 
-          position={[0, 0, 0.35]}
-        >
+        <mesh castShadow receiveShadow position={[0, 0, 0.35]}>
           <cylinderGeometry args={[1.9, 1.9, 0.1, 64]} />
           <primitive object={bezelMaterial} />
         </mesh>
@@ -268,15 +252,15 @@ export default function EnhancedWatchRenderer({
                 position={[
                   Math.cos(angle) * 1.85,
                   Math.sin(angle) * 1.85,
-                  0.35
+                  0.35,
                 ]}
                 rotation={[0, 0, -angle]}
                 castShadow
               >
                 <boxGeometry args={[0.06, 0.02, 0.08]} />
-                <meshPhysicalMaterial 
-                  color="#111111" 
-                  metalness={0.9} 
+                <meshPhysicalMaterial
+                  color="#111111"
+                  metalness={0.9}
                   roughness={0.1}
                 />
               </mesh>
@@ -287,30 +271,22 @@ export default function EnhancedWatchRenderer({
       </group>
 
       {/* Crystal */}
-      <mesh 
-        position={[0, 0, 0.4]}
-        receiveShadow
-      >
+      <mesh position={[0, 0, 0.4]} receiveShadow>
         <cylinderGeometry args={[1.75, 1.75, 0.08, 64]} />
         <primitive object={crystalMaterial} />
       </mesh>
 
       {/* Advanced Movement Component */}
-      <AdvancedMovement 
+      <AdvancedMovement
         movementType="mechanical"
         isRunning={true}
         powerReserve={42}
       />
 
       {/* Reflection probe for realistic reflections */}
-      <mesh 
-        visible={false}
-        position={[0, 0, 0]}
-      >
+      <mesh visible={false} position={[0, 0, 0]}>
         <sphereGeometry args={[10]} />
-        <meshBasicMaterial 
-          side={THREE.BackSide}
-        />
+        <meshBasicMaterial side={THREE.BackSide} />
       </mesh>
     </group>
   );

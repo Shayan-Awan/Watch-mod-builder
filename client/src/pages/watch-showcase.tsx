@@ -54,6 +54,8 @@ const watchBuilds: WatchBuild[] = [
     totalCost: 1799,
     featured: false,
     parts: {
+
+
       case: { name: "Rose Gold Plated Case 38mm", price: 899, material: "Rose Gold" },
       dial: { name: "Mother of Pearl Dial", price: 349, material: "Mother of Pearl" },
       hands: { name: "Rose Gold Hands", price: 229, material: "Rose Gold" },
@@ -62,6 +64,8 @@ const watchBuilds: WatchBuild[] = [
     }
   },
   {
+
+
     id: "3",
     title: "Stealth Black Edition",
     author: "TacticalWatch",
@@ -133,6 +137,7 @@ export default function WatchShowcase() {
                 onChange={(e) => setSortBy(e.target.value)}
                 className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 focus:border-transparent"
               >
+
                 <option value="recent">Most Recent</option>
                 <option value="popular">Most Popular</option>
                 <option value="expensive">Highest Value</option>
@@ -144,6 +149,8 @@ export default function WatchShowcase() {
             </div>
           </div>
         </div>
+
+
 
         {/* Watch Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

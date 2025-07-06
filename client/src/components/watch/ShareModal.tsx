@@ -15,7 +15,7 @@ export default function ShareModal({ open, onOpenChange }: ShareModalProps) {
   const { config } = useWatchStore();
   const [copied, setCopied] = useState(false);
   
-  // Create shareable URL with configuration in query parameters
+  // Create shareable URL with configuration in query parameters 
   const getShareableUrl = () => {
     const baseUrl = window.location.origin;
     const params = new URLSearchParams();

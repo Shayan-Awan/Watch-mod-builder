@@ -14,6 +14,7 @@ export class WatchMaterialLibrary {
 
                 private async loadEnvironmentMap() {
                           // Load HDRI environment map for realistic reflections
+// aso worked on a lighting rig with high quality shaddows. 
                               const urls = [
                                           '/textures/env/px.jpg', '/textures/env/nx.jpg',
                                                 '/textures/env/py.jpg', '/textures/env/ny.jpg',
