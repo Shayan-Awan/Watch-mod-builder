@@ -1,324 +1,353 @@
-import { useRef, useEffect } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, PerspectiveCamera, Environment, Text } from '@react-three/drei';
-import * as THREE from 'three';
-import { useWatchStore } from '../../lib/stores/useWatchStore';
-import { watchComponents, ComponentType } from '../../data/watchComponents';
+import { useRef, useEffect } from "react";
+import { useGLTF } from "@react-three/drei";
+import { useFrame, useThree } from "@react-three/fiber";
+import * as THREE from "three";
+import { useWatchStore } from "@/lib/stores/useWatchStore";
+import { ComponentType } from "@/data/watchComponents";
 
-interface ThreeDWatchProps {
-    rotating: boolean;
+// Define material colors based on component selections
+const materials = {
+  cases: {
+    case_skx007: new THREE.MeshStandardMaterial({
+      color: "#C0C0C0",
+      metalness: 0.7,
+      roughness: 0.2,
+    }),
+    case_sarb033: new THREE.MeshStandardMaterial({
+      color: "#C0C0C0",
+      metalness: 0.8,
+      roughness: 0.1,
+    }),
+    case_turtle: new THREE.MeshStandardMaterial({
+      color: "#C0C0C0",
+      metalness: 0.6,
+      roughness: 0.3,
+    }),
+    case_presage: new THREE.MeshStandardMaterial({
+      color: "#DDCCA3",
+      metalness: 0.8,
+      roughness: 0.1,
+    }),
+  },
+  dials: {
+    dial_black: new THREE.MeshStandardMaterial({
+      color: "#000000",
+      metalness: 0.3,
+      roughness: 0.7,
+    }),
+    dial_blue: new THREE.MeshStandardMaterial({
+      color: "#14213D",
+      metalness: 0.4,
+      roughness: 0.6,
+    }),
+    dial_green: new THREE.MeshStandardMaterial({
+      color: "#285943",
+      metalness: 0.4,
+      roughness: 0.6,
+    }),
+    dial_white: new THREE.MeshStandardMaterial({
+      color: "#FFFFFF",
+      metalness: 0.2,
+      roughness: 0.8,
+    }),
+    dial_cream: new THREE.MeshStandardMaterial({
+      color: "#F5EFE0",
+      metalness: 0.2,
+      roughness: 0.8,
+    }),
+    dial_orange: new THREE.MeshStandardMaterial({
+      color: "#FCA311",
+      metalness: 0.3,
+      roughness: 0.7,
+    }),
+  },
+  hands: {
+    hands_standard: new THREE.MeshStandardMaterial({
+      color: "#C0C0C0",
+      metalness: 0.9,
+      roughness: 0.1,
+    }),
+    hands_sword: new THREE.MeshStandardMaterial({
+      color: "#C0C0C0",
+      metalness: 0.8,
+      roughness: 0.2,
+    }),
+    hands_cathedral: new THREE.MeshStandardMaterial({
+      color: "#C0C0C0",
+      metalness: 0.9,
+      roughness: 0.1,
+    }),
+    hands_gold: new THREE.MeshStandardMaterial({
+      color: "#DDCCA3",
+      metalness: 0.9,
+      roughness: 0.1,
+    }),
+    hands_snowflake: new THREE.MeshStandardMaterial({
+      color: "#C0C0C0",
+      metalness: 0.8,
+      roughness: 0.2,
+    }),
+  },
+  bezels: {
+    bezel_steel: new THREE.MeshStandardMaterial({
+      color: "#C0C0C0",
+      metalness: 0.9,
+      roughness: 0.1,
+    }),
+    bezel_dive: new THREE.MeshStandardMaterial({
+      color: "#444444",
+      metalness: 0.6,
+      roughness: 0.4,
+    }),
+    bezel_gmt: new THREE.MeshStandardMaterial({
+      color: "#14213D",
+      metalness: 0.5,
+      roughness: 0.4,
+    }),
+    bezel_fluted: new THREE.MeshStandardMaterial({
+      color: "#C0C0C0",
+      metalness: 0.9,
+      roughness: 0.1,
+    }),
+    bezel_gold: new THREE.MeshStandardMaterial({
+      color: "#DDCCA3",
+      metalness: 0.9,
+      roughness: 0.1,
+    }),
+  },
+};
+
+// Watch component meshes
+interface WatchMeshes {
+  case: THREE.Group;
+  dial: THREE.Group;
+  hands: THREE.Group;
+  bezel: THREE.Group;
 }
 
-function WatchModel() {
-    const groupRef = useRef<THREE.Group>(null);
-      const hourHandRef = useRef<THREE.Mesh>(null);
-        const minuteHandRef = useRef<THREE.Mesh>(null);
-          const secondHandRef = useRef<THREE.Mesh>(null);
-            const { config } = useWatchStore();
-              
-              useFrame((state) => {
-                    if (groupRef.current && useWatchStore.getState().rotating) {
-                            groupRef.current.rotation.y += 0.008;
-                    }
-                        
-                        // Animate watch hands to show current time
-                            const time = Date.now() * 0.001;
-                                if (hourHandRef.current) {
-                                        hourHandRef.current.rotation.y = -time * 0.1;
-                                }
-                                    if (minuteHandRef.current) {
-                                            minuteHandRef.current.rotation.y = -time * 0.5;
-                                    }
-                                        if (secondHandRef.current) {
-                                                secondHandRef.current.rotation.y = -time * 2;
-                                        }
-                                      });
-
-                                        const createWatchCase = (selectedId: string) => {
-                                              const component = watchComponents.case.find(c => c.id === selectedId);
-                                                  if (!component) return new THREE.Group();
-
-                                                      const group = new THREE.Group();
-                                                          
-                                                          // Main case body
-                                                              const caseGeometry = new THREE.CylinderGeometry(2.2, 2.4, 1.2, 64);
-                                                                  const caseMaterial = new THREE.MeshStandardMaterial({ 
-                                                                          color: component.color || '#C0C0C0',
-                                                                                metalness: 0.9,
-                                                                                      roughness: 0.1,
-                                                                                            envMapIntensity: 1.5
-                                                                  });
-                                                                      const caseMesh = new THREE.Mesh(caseGeometry, caseMaterial);
-                                                                          
-                                                                          // Case back
-                                                                              const backGeometry = new THREE.CylinderGeometry(2.1, 2.1, 0.3, 64);
-                                                                                  const backMesh = new THREE.Mesh(backGeometry, caseMaterial);
-                                                                                      backMesh.position.y = -0.75;
-                                                                                          
-                                                                                          // Crown
-                                                                                              const crownGeometry = new THREE.CylinderGeometry(0.1, 0.12, 0.4, 16);
-                                                                                                  const crownMesh = new THREE.Mesh(crownGeometry, caseMaterial);
-                                                                                                      crownMesh.position.set(2.3, 0.2, 0);
-                                                                                                          crownMesh.rotation.z = Math.PI / 2;
-                                                                                                              
-                                                                                                              // Lugs
-                                                                                                                  const lugGeometry = new THREE.BoxGeometry(0.4, 0.8, 0.3);
-                                                                                                                      const lug1 = new THREE.Mesh(lugGeometry, caseMaterial);
-                                                                                                                          const lug2 = new THREE.Mesh(lugGeometry, caseMaterial);
-                                                                                                                              const lug3 = new THREE.Mesh(lugGeometry, caseMaterial);
-                                                                                                                                  const lug4 = new THREE.Mesh(lugGeometry, caseMaterial);
-                                                                                                                                  
-                                                                                                                                      lug1.position.set(0, 0.4, 2.4);
-                                                                                                                                          lug2.position.set(0, 0.4, -2.4);
-                                                                                                                                              lug3.position.set(0, -0.4, 2.4);
-                                                                                                                                                  lug4.position.set(0, -0.4, -2.4);
-                                                                                                                                                      
-                                                                                                                                                      group.add(caseMesh, backMesh, crownMesh, lug1, lug2, lug3, lug4);
-                                                                                                                                                          return group;
-                                                                };
-
-                                                                  const createWatchDial = (selectedId: string) => {
-                                                                        const component = watchComponents.dial.find(c => c.id === selectedId);
-                                                                            if (!component) return new THREE.Group();
-
-                                                                                const group = new THREE.Group();
-                                                                                    
-                                                                                    // Main dial
-                                                                                        const dialGeometry = new THREE.CylinderGeometry(1.9, 1.9, 0.05, 64);
-                                                                                            const dialMaterial = new THREE.MeshStandardMaterial({ 
-                                                                                                    color: component.color || '#FFFFFF',
-                                                                                                          metalness: 0.1,
-                                                                                                                roughness: 0.7
-                                                                                            });
-                                                                                                const dialMesh = new THREE.Mesh(dialGeometry, dialMaterial);
-                                                                                                    dialMesh.position.y = 0.525;
-                                                                                                        
-                                                                                                        // Hour markers
-                                                                                                            const markerMaterial = new THREE.MeshStandardMaterial({ 
-                                                                                                                    color: '#333333',
-                                                                                                                          metalness: 0.3,
-                                                                                                                                roughness: 0.4
-                                                                                                            });
-                                                                                                                
-                                                                                                                for (let i = 0; i < 12; i++) {
-                                                                                                                        const angle = (i * Math.PI * 2) / 12;
-                                                                                                                              const isMainHour = i % 3 === 0;
-                                                                                                                                    
-                                                                                                                                    const markerGeometry = isMainHour 
-                                                                                                                                            ? new THREE.BoxGeometry(0.08, 0.3, 0.02)
-                                                                                                                                                    : new THREE.BoxGeometry(0.04, 0.15, 0.02);
-                                                                                                                                                            
-                                                                                                                                                          const marker = new THREE.Mesh(markerGeometry, markerMaterial);
-                                                                                                                                                                const radius = isMainHour ? 1.6 : 1.7;
-                                                                                                                                                                      
-                                                                                                                                                                      marker.position.set(
-                                                                                                                                                                                Math.sin(angle) * radius,
-                                                                                                                                                                                        0.55,
-                                                                                                                                                                                                Math.cos(angle) * radius      );
-                                                                                                                                                                                                      marker.rotation.y = -angle;
-                                                                                                                                                                                                            
-                                                                                                                                                                                                            group.add(marker);
-                                                                                                                                                                      }
-                                                                                                                                                                          
-                                                                                                                                                                          // Center dot
-                                                                                                                                                                              const centerGeometry = new THREE.CylinderGeometry(0.05, 0.05, 0.02, 16);
-                                                                                                                                                                                  const centerMesh = new THREE.Mesh(centerGeometry, markerMaterial);
-                                                                                                                                                                                      centerMesh.position.y = 0.56;
-                                                                                                                                                                                          
-                                                                                                                                                                                          group.add(dialMesh, centerMesh);
-                                                                                                                                                                                              return group;
-                                                                                                                                                                    };
-
-                                                                                                                                                                      const createWatchHands = (selectedId: string) => {
-                                                                                                                                                                            const component = watchComponents.hands.find(c => c.id === selectedId);
-                                                                                                                                                                                if (!component) return new THREE.Group();
-
-                                                                                                                                                                                    const group = new THREE.Group();
-                                                                                                                                                                                        
-                                                                                                                                                                                        const handMaterial = new THREE.MeshStandardMaterial({ 
-                                                                                                                                                                                                color: component.color || '#000000',
-                                                                                                                                                                                                      metalness: 0.7,
-                                                                                                                                                                                                            roughness: 0.2
-                                                                                                                                                                                        });
-                                                                                                                                                                                            
-                                                                                                                                                                                            // Hour hand (flat on the dial)
-                                                                                                                                                                                                const hourGeometry = new THREE.BoxGeometry(0.8, 0.015, 0.04);
-                                                                                                                                                                                                    const hourHand = new THREE.Mesh(hourGeometry, handMaterial);
-                                                                                                                                                                                                        hourHand.position.set(0, 0.57, 0);
-                                                                                                                                                                                                            hourHandRef.current = hourHand;
-                                                                                                                                                                                                                
-                                                                                                                                                                                                                // Minute hand (flat on the dial)
-                                                                                                                                                                                                                    const minuteGeometry = new THREE.BoxGeometry(1.2, 0.015, 0.03);
-                                                                                                                                                                                                                        const minuteHand = new THREE.Mesh(minuteGeometry, handMaterial);
-                                                                                                                                                                                                                            minuteHand.position.set(0, 0.575, 0);
-                                                                                                                                                                                                                                minuteHandRef.current = minuteHand;
-                                                                                                                                                                                                                                    
-                                                                                                                                                                                                                                    // Second hand (flat on the dial)
-                                                                                                                                                                                                                                        const secondGeometry = new THREE.BoxGeometry(1.4, 0.015, 0.015);
-                                                                                                                                                                                                                                            const secondMaterial = new THREE.MeshStandardMaterial({ 
-                                                                                                                                                                                                                                                    color: '#FF0000',
-                                                                                                                                                                                                                                                          metalness: 0.8,
-                                                                                                                                                                                                                                                                roughness: 0.1
-                                                                                                                                                                                                                                            });
-                                                                                                                                                                                                                                                const secondHand = new THREE.Mesh(secondGeometry, secondMaterial);
-                                                                                                                                                                                                                                                    secondHand.position.set(0, 0.58, 0);
-                                                                                                                                                                                                                                                        secondHandRef.current = secondHand;
-                                                                                                                                                                                                                                                            
-                                                                                                                                                                                                                                                            group.add(hourHand, minuteHand, secondHand);
-                                                                                                                                                                                                                                                                return group;
-                                                                                                                                                                                                                                          };
-
-                                                                                                                                                                                                                                            const createWatchBezel = (selectedId: string) => {
-                                                                                                                                                                                                                                                  const component = watchComponents.bezel.find(c => c.id === selectedId);
-                                                                                                                                                                                                                                                      if (!component) return new THREE.Group();
-
-                                                                                                                                                                                                                                                          const group = new THREE.Group();
-                                                                                                                                                                                                                                                              
-                                                                                                                                                                                                                                                              // Outer bezel ring
-                                                                                                                                                                                                                                                                  const outerGeometry = new THREE.CylinderGeometry(2.3, 2.3, 0.2, 64);
-                                                                                                                                                                                                                                                                      const innerGeometry = new THREE.CylinderGeometry(2.0, 2.0, 0.25, 64);
-                                                                                                                                                                                                                                                                          
-                                                                                                                                                                                                                                                                          const outerMesh = new THREE.Mesh(outerGeometry, new THREE.MeshStandardMaterial({ 
-                                                                                                                                                                                                                                                                                  color: component.color || '#FFD700',
-                                                                                                                                                                                                                                                                                        metalness: 0.95,
-                                                                                                                                                                                                                                                                                              roughness: 0.05,
-                                                                                                                                                                                                                                                                                                    envMapIntensity: 2
-                                                                                                                                                                                                                                                                          }));
-                                                                                                                                                                                                                                                                              
-                                                                                                                                                                                                                                                                              const innerMesh = new THREE.Mesh(innerGeometry, new THREE.MeshStandardMaterial({ 
-                                                                                                                                                                                                                                                                                      color: '#000000',
-                                                                                                                                                                                                                                                                                            metalness: 0.1,
-                                                                                                                                                                                                                                                                                                  roughness: 0.9
-                                                                                                                                                                                                                                                                              }));
-                                                                                                                                                                                                                                                                                  
-                                                                                                                                                                                                                                                                                  outerMesh.position.y = 0.6;
-                                                                                                                                                                                                                                                                                      innerMesh.position.y = 0.6;
-                                                                                                                                                                                                                                                                                          
-                                                                                                                                                                                                                                                                                          // Bezel markers
-                                                                                                                                                                                                                                                                                              for (let i = 0; i < 60; i++) {
-                                                                                                                                                                                                                                                                                                      if (i % 5 === 0) {
-                                                                                                                                                                                                                                                                                                                const angle = (i * Math.PI * 2) / 60;
-                                                                                                                                                                                                                                                                                                                        const markerGeometry = new THREE.BoxGeometry(0.03, 0.1, 0.02);
-                                                                                                                                                                                                                                                                                                                                const marker = new THREE.Mesh(markerGeometry, new THREE.MeshStandardMaterial({ 
-                                                                                                                                                                                                                                                                                                                                            color: '#FFFFFF',
-                                                                                                                                                                                                                                                                                                                                                      metalness: 0.3,
-                                                                                                                                                                                                                                                                                                                                                                roughness: 0.4
-                                                                                                                                                                                                                                                                                                                                }));
-                                                                                                                                                                                                                                                                                                                                        
-                                                                                                                                                                                                                                                                                                                                        marker.position.set(
-                                                                                                                                                                                                                                                                                                                                                    Math.sin(angle) * 2.15,
-                                                                                                                                                                                                                                                                                                                                                              0.65,
-                                                                                                                                                                                                                                                                                                                                                                        Math.cos(angle) * 2.15
-                                                                                                                                                                                                                                                                                                                                        );
-                                                                                                                                                                                                                                                                                                                                                marker.rotation.y = -angle;
-                                                                                                                                                                                                                                                                                                                                                        
-                                                                                                                                                                                                                                                                                                                                                        group.add(marker);
-                                                                                                                                                                                                                                                                                                                                      }
-                                                                                                                                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                                                                                                                                        
-                                                                                                                                                                                                                                                                                                                                        group.add(outerMesh, innerMesh);
-                                                                                                                                                                                                                                                                                                                                            return group;
-                                                                                                                                                                                                                                                                                                                                  };
-
-                                                                                                                                                                                                                                                                                                                                    useEffect(() => {
-                                                                                                                                                                                                                                                                                                                                          if (!groupRef.current) return;
-
-                                                                                                                                                                                                                                                                                                                                              // Clear existing children
-                                                                                                                                                                                                                                                                                                                                                  while (groupRef.current.children.length > 0) {
-                                                                                                                                                                                                                                                                                                                                                          groupRef.current.remove(groupRef.current.children[0]);
-                                                                                                                                                                                                                                                                                                                                                  }
-
-                                                                                                                                                                                                                                                                                                                                                      // Add watch components
-                                                                                                                                                                                                                                                                                                                                                          const caseComponent = createWatchCase(config.case);
-                                                                                                                                                                                                                                                                                                                                                              const dialComponent = createWatchDial(config.dial);
-                                                                                                                                                                                                                                                                                                                                                                  const handsComponent = createWatchHands(config.hands);
-                                                                                                                                                                                                                                                                                                                                                                      const bezelComponent = createWatchBezel(config.bezel);
-
-                                                                                                                                                                                                                                                                                                                                                                          groupRef.current.add(caseComponent, dialComponent, handsComponent, bezelComponent);
-                                                                                                                                                                                                                                                                                                                                                }, [config]);
-
-                                                                                                                                                                                                                                                                                                                                                  return (
-                                                                                                                                                                                                                                                                                                                                                        <group ref={groupRef} position={[0, 0, 0]} castShadow receiveShadow>
-                                                                                                                                                                                                                                                                                                                                                                {/* Watch components will be added dynamically */}
-                                                                                                                                                                                                                                                                                                                                                                    </group>  );
+interface ThreeDWatchProps {
+  rotating: boolean;
 }
 
 export default function ThreeDWatch({ rotating }: ThreeDWatchProps) {
-    const { setRotating } = useWatchStore();
+  const watchGroup = useRef<THREE.Group>(null);
+  const { config } = useWatchStore();
+  const { camera } = useThree();
 
-      useEffect(() => {
-            setRotating(rotating);
-      }, [rotating, setRotating]);
+  // Create a dummy watch model for now (will be replaced with actual models)
+  const createWatchComponent = (type: ComponentType, selectedId: string) => {
+    const group = new THREE.Group();
 
-        return (
-              <div className="w-full h-full bg-gradient-to-b from-gray-50 to-gray-100">
-                      <Canvas shadows camera={{ position: [0, 0, 8], fov: 45 }}>
-                                <PerspectiveCamera makeDefault position={[0, 2, 6]} />
-                                        <OrbitControls 
-                                                  enablePan={true} 
-                                                            enableZoom={true} 
-                                                                      enableRotate={true}
-                                                                                minDistance={4}
-                                                                                          maxDistance={12}
-                                                                                                    maxPolarAngle={Math.PI / 1.8}
-                                                                                                              minPolarAngle={Math.PI / 4}
-                                                                                                                      />
-                                                                                                                              
-                                                                                                                                      <ambientLight intensity={0.4} />
-                                                                                                                                              <directionalLight 
-                                                                                                                                                        position={[10, 10, 5]} 
-                                                                                                                                                                  intensity={.2} 
-                                                                                                                                                                          castShadow          shadow-mapSize-width={2048}
-                                                                                                                                                                                  shadow-mapSize-height={2048}
-                                                                                                                                                                                        />
-                                                                                                                                                                                                <pointLight position={[-10, 5, -5]} intensity={0.5} color="#ffffff" />
-                                                                                                                                                                                                        <spotLight          position={[0, 10, 0]}
-                                                                                                                                                                                                                  angle={0.3}
-                                                                                                                                                                                                                          penumbra={          intensity={0.8}
-                                                                                                                                                                                                                                  castShadow
-                                                                                                                                                                                                                                        />
-                                                                                                                                                                                                                                              
-                                                                                                                                                                                                                                              <Environment preset="studio" background={false} />
-                                                                                                                                                                                                                                                    
-                                                                                                                                                                                                                                                    <WatchModel />
-                                                                                                                                                                                                                                                          
-                                                                                                                                                                                                                                                          {/* Ground plane for shadows */}
-                                                                                                                                                                                                                                                                <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, -3, 0]}>
-                                                                                                                                                                                                                                                                            <planeGeometry args={[20, 20]} />
-                                                                                                                                                                                                                                                                                      <shadowMaterial opacity={0.1} />
-                                                                                                                                                                                                                                                                                              </mesh>      </Canvas>    </div>  );
-}
-                                                                                                                                                                                                                                                                </mesh>}}
-                      </Canvas>
-              </div>
-        )
-      })
-}
-                                                                                                                                                                                                                                                                                                                                                        </group>
-                                                                                                                                                                                                                                                                                                                                                  )
-                                                                                                                                                                                                                                                                                                                                                  }
-                                                                                                                                                                                                                                                                                                                                    })
-                                                                                                                                                                                                                                                                                                                                        )
-                                                                                                                                                                                                                                                                                                                                }))
-                                                                                                                                                                                                                                                                                                      }
-                                                                                                                                                                                                                                                                                              }
-                                                                                                                                                                                                                                                                              }))
-                                                                                                                                                                                                                                                                          }))
-                                                                                                                                                                                                                                            }
-                                                                                                                                                                                                                                            })
-                                                                                                                                                                                        })
-                                                                                                                                                                      }
-                                                                                                                                                                      )
-                                                                                                                }
-                                                                                                            })
-                                                                                            })
-                                                                  }
-                                                                  })
-                                        }
-                                        }
-                                    }
-                                }
-                    }
-              })
-}
+    let geometry: THREE.BufferGeometry;
+    let material: THREE.Material;
+    let mesh: THREE.Mesh;
+
+    switch (type) {
+      case "case":
+        // Watch case (cylinder)
+        geometry = new THREE.CylinderGeometry(1, 1, 0.3, 32);
+        material =
+          materials.cases[selectedId as keyof typeof materials.cases] ||
+          new THREE.MeshStandardMaterial({
+            color: "#C0C0C0",
+            metalness: 0.7,
+            roughness: 0.2,
+          });
+        mesh = new THREE.Mesh(geometry, material);
+        group.add(mesh);
+
+        // Case back
+        const backGeometry = new THREE.CylinderGeometry(0.95, 0.95, 0.1, 32);
+        const backMaterial = new THREE.MeshStandardMaterial({
+          color: "#A0A0A0",
+          metalness: 0.6,
+          roughness: 0.3,
+        });
+        const back = new THREE.Mesh(backGeometry, backMaterial);
+        back.position.y = -0.2;
+        group.add(back);
+
+        // Crown
+        const crownGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.1, 16);
+        const crownMaterial = new THREE.MeshStandardMaterial({
+          color: "#C0C0C0",
+          metalness: 0.8,
+          roughness: 0.1,
+        });
+        const crown = new THREE.Mesh(crownGeometry, crownMaterial);
+        crown.rotation.x = Math.PI / 2;
+        crown.position.set(1.1, 0, 0);
+        group.add(crown);
+        break;
+
+      case "dial":
+        // Watch dial
+        geometry = new THREE.CircleGeometry(0.9, 32);
+        material =
+          materials.dials[selectedId as keyof typeof materials.dials] ||
+          new THREE.MeshStandardMaterial({
+            color: "#000000",
+            metalness: 0.3,
+            roughness: 0.7,
+          });
+        mesh = new THREE.Mesh(geometry, material);
+        mesh.position.y = 0.151;
+        mesh.rotation.x = -Math.PI / 2;
+
+        // Hour markers
+        for (let i = 0; i < 12; i++) {
+          const angle = (i / 12) * Math.PI * 2;
+          const markerGeometry =
+            i % 3 === 0
+              ? new THREE.BoxGeometry(0.08, 0.02, 0.1)
+              : new THREE.BoxGeometry(0.05, 0.02, 0.06);
+          const markerMaterial = new THREE.MeshStandardMaterial({
+            color: "#FFFFFF",
+            metalness: 0.5,
+          });
+          const marker = new THREE.Mesh(markerGeometry, markerMaterial);
+
+          marker.position.x = Math.sin(angle) * 0.75;
+          marker.position.z = Math.cos(angle) * 0.75;
+          marker.position.y = 0.16;
+          marker.rotation.y = -angle;
+
+          group.add(marker);
+        }
+
+        group.add(mesh);
+        break;
+
+      case "hands":
+        // Hour hand (pointing to 10 o'clock) - centered with pivot at one end
+        const hourHandGeometry = new THREE.BoxGeometry(0.5, 0.01, 0.08);
+        const hourHandMaterial =
+          materials.hands[selectedId as keyof typeof materials.hands] ||
+          new THREE.MeshStandardMaterial({
+            color: "#C0C0C0",
+            metalness: 0.9,
+            roughness: 0.1,
+          });
+        const hourHand = new THREE.Mesh(hourHandGeometry, hourHandMaterial);
+        hourHand.geometry.translate(0.25, 0, 0); // Move pivot to one end
+        hourHand.position.set(0, 0.17, 0); // Center at origin
+        hourHand.rotation.y = Math.PI / 6; // 30 degrees clockwise
+        group.add(hourHand);
+
+        // Minute hand (pointing to 2 o'clock) - centered with pivot at one end
+        const minuteHandGeometry = new THREE.BoxGeometry(0.7, 0.01, 0.05);
+        const minuteHand = new THREE.Mesh(minuteHandGeometry, hourHandMaterial);
+        minuteHand.geometry.translate(0.35, 0, 0); // Move pivot to one end
+        minuteHand.position.set(0, 0.18, 0); // Center at origin
+        minuteHand.rotation.y = -Math.PI / 3; // 60 degrees counter-clockwise
+        group.add(minuteHand);
+
+        // Second hand (pointing to 6 o'clock) - centered with pivot at one end
+        const secondHandGeometry = new THREE.BoxGeometry(0.8, 0.01, 0.02);
+        const secondHandMaterial = new THREE.MeshStandardMaterial({
+          color: "#FCA311",
+          metalness: 0.8,
+          roughness: 0.2,
+        });
+        const secondHand = new THREE.Mesh(
+          secondHandGeometry,
+          secondHandMaterial
+        );
+        secondHand.geometry.translate(0.4, 0, 0); // Move pivot to one end
+        secondHand.position.set(0, 0.19, 0); // Center at origin
+        secondHand.rotation.y = Math.PI; // 180 degrees
+        group.add(secondHand);
+
+        // Center cap
+        const centerCapGeometry = new THREE.CylinderGeometry(
+          0.05,
+          0.05,
+          0.02,
+          16
+        );
+        const centerCap = new THREE.Mesh(centerCapGeometry, hourHandMaterial);
+        centerCap.position.y = 0.19;
+        group.add(centerCap);
+        break;
+
+      case "bezel":
+        // Bezel
+        geometry = new THREE.TorusGeometry(1, 0.1, 16, 100);
+        material =
+          materials.bezels[selectedId as keyof typeof materials.bezels] ||
+          new THREE.MeshStandardMaterial({
+            color: "#C0C0C0",
+            metalness: 0.9,
+            roughness: 0.1,
+          });
+        mesh = new THREE.Mesh(geometry, material);
+        mesh.position.y = 0.15;
+        mesh.rotation.x = Math.PI / 2;
+
+        // Add bezel markers for dive bezels
+        if (selectedId === "bezel_dive" || selectedId === "bezel_gmt") {
+          for (let i = 0; i < 12; i++) {
+            const angle = (i / 12) * Math.PI * 2;
+            const markerGeometry = new THREE.BoxGeometry(0.03, 0.03, 0.03);
+            const markerMaterial = new THREE.MeshStandardMaterial({
+              color: "#FFFFFF",
+            });
+            const marker = new THREE.Mesh(markerGeometry, markerMaterial);
+
+            marker.position.x = Math.sin(angle) * 1;
+            marker.position.z = Math.cos(angle) * 1;
+            marker.position.y = 0.2;
+
+            group.add(marker);
+          }
+        }
+
+        group.add(mesh);
+        break;
+    }
+
+    return group;
+  };
+
+  // Set up watch components
+  useEffect(() => {
+    if (watchGroup.current) {
+      // Clear existing meshes
+      while (watchGroup.current.children.length > 0) {
+        watchGroup.current.remove(watchGroup.current.children[0]);
+      }
+
+      // Create new components based on configuration
+      const components: WatchMeshes = {
+        case: createWatchComponent("case", config.case),
+        dial: createWatchComponent("dial", config.dial),
+        hands: createWatchComponent("hands", config.hands),
+        bezel: createWatchComponent("bezel", config.bezel),
+      };
+
+      // Add components to the watch group
+      Object.values(components).forEach((component) => {
+        watchGroup.current?.add(component);
+      });
+    }
+  }, [config]);
+
+  // Animation
+  useFrame((state, delta) => {
+    if (watchGroup.current && rotating) {
+      watchGroup.current.rotation.y += delta * 0.3;
+    }
+
+    // Set initial camera position
+    if (camera.position.z === 0) {
+      camera.position.set(0, 0, 5);
+      camera.lookAt(0, 0, 0);
+    }
+  });
+
+  return (
+    <group ref={watchGroup} position={[0, 0, 0]} rotation={[0.3, 0, 0]}>
+      {/* Watch components will be added dynamically */}
+    </group>
+  );
 }

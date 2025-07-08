@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import { useRef, useState, useMemo } from "react";
 
+
 export interface ManufacturingProcess {
   processType: "machining" | "additive" | "casting" | "forging" | "etching";
   tolerances: number[];
@@ -29,7 +30,7 @@ export class DigitalTwinManufacturing {
     materialProperties: number;
     defectRate: number;
   };
-
+//so here is an examople where we are calculating quality based on a condition of the machine below
   constructor() {
     this.initializeMachines();
     this.qualityMetrics = {
