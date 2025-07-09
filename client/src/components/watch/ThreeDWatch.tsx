@@ -4,7 +4,7 @@ import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { useWatchStore } from "@/lib/stores/useWatchStore";
 import { ComponentType } from "@/data/watchComponents";
-
+//colors
 // Define material colors based on component selections
 const materials = {
   cases: {
@@ -134,7 +134,7 @@ export default function ThreeDWatch({ rotating }: ThreeDWatchProps) {
   const { config } = useWatchStore();
   const { camera } = useThree();
 
-  // Create a dummy watch model for now (will be replaced with actual models)
+  //  its still dummy but serves its purpose for the app
   const createWatchComponent = (type: ComponentType, selectedId: string) => {
     const group = new THREE.Group();
 
@@ -144,7 +144,7 @@ export default function ThreeDWatch({ rotating }: ThreeDWatchProps) {
 
     switch (type) {
       case "case":
-        // Watch case (cylinder)
+        // Watch case (cylinder) this might need to be worked on more
         geometry = new THREE.CylinderGeometry(1, 1, 0.3, 32);
         material =
           materials.cases[selectedId as keyof typeof materials.cases] ||
@@ -181,7 +181,7 @@ export default function ThreeDWatch({ rotating }: ThreeDWatchProps) {
         break;
 
       case "dial":
-        // Watch dial
+        // Watch dial, this required some costumization
         geometry = new THREE.CircleGeometry(0.9, 32);
         material =
           materials.dials[selectedId as keyof typeof materials.dials] ||
@@ -219,7 +219,7 @@ export default function ThreeDWatch({ rotating }: ThreeDWatchProps) {
         break;
 
       case "hands":
-        // Hour hand (pointing to 10 o'clock) - centered with pivot at one end
+        // Hour hand (pointing to 10 o'clock) - centered with pivot at one end, the time doesnt tick, the hands are stationary, considered adding the moving hands but loading/buffer time would also greatly increase
         const hourHandGeometry = new THREE.BoxGeometry(0.5, 0.01, 0.08);
         const hourHandMaterial =
           materials.hands[selectedId as keyof typeof materials.hands] ||
@@ -284,7 +284,7 @@ export default function ThreeDWatch({ rotating }: ThreeDWatchProps) {
         mesh.position.y = 0.15;
         mesh.rotation.x = Math.PI / 2;
 
-        // Add bezel markers for dive bezels
+        // Add bezel markers for dive bezels the GMT stuff
         if (selectedId === "bezel_dive" || selectedId === "bezel_gmt") {
           for (let i = 0; i < 12; i++) {
             const angle = (i / 12) * Math.PI * 2;
@@ -351,3 +351,6 @@ export default function ThreeDWatch({ rotating }: ThreeDWatchProps) {
     </group>
   );
 }
+
+
+//i actually reprogrammed everything since i was having trouble finding and fixing stuff, what i mean by reprogramming is deleting this all and pasting it into a text document and then re-typing it out and making changes as i go
